@@ -260,24 +260,24 @@ public class Timestamp {
      */
     public String toString(int indent) {
         StringBuilder builder = new StringBuilder();
-        builder.append(Timestamp.indention(indent) + "msg: " + Utils.bytesToHex(this.msg).toLowerCase() + "\n");
-        builder.append(Timestamp.indention(indent) + this.attestations.size() + " attestations: \n");
+        builder.append(Timestamp.indention(indent)).append("msg: ").append(Utils.bytesToHex(this.msg).toLowerCase()).append("\n");
+        builder.append(Timestamp.indention(indent)).append(this.attestations.size()).append(" attestations: \n");
         int i = 0;
 
         for (final TimeAttestation attestation : this.attestations) {
-            builder.append(Timestamp.indention(indent) + "[" + i + "] " + attestation.toString() + "\n");
+            builder.append(Timestamp.indention(indent)).append("[").append(i).append("] ").append(attestation.toString()).append("\n");
             i++;
         }
 
         i = 0;
-        builder.append(Timestamp.indention(indent) + this.ops.size() + " ops: \n");
+        builder.append(Timestamp.indention(indent)).append(this.ops.size()).append(" ops: \n");
 
         for (Map.Entry<Op, Timestamp> entry : this.ops.entrySet()) {
             Timestamp stamp = entry.getValue();
             Op op = entry.getKey();
 
-            builder.append(Timestamp.indention(indent) + "[" + i + "] op: " + op.toString() + "\n");
-            builder.append(Timestamp.indention(indent) + "[" + i + "] timestamp: \n");
+            builder.append(Timestamp.indention(indent)).append("[").append(i).append("] op: ").append(op.toString()).append("\n");
+            builder.append(Timestamp.indention(indent)).append("[").append(i).append("] timestamp: \n");
             builder.append(stamp.toString(indent + 1));
             i++;
         }
@@ -359,11 +359,11 @@ public class Timestamp {
         if (!this.attestations.isEmpty()) {
             for (final TimeAttestation attestation : this.attestations) {
                 builder.append(Timestamp.indention(indent));
-                builder.append("verify " + attestation.toString() + strResult(verbosity, this.msg, null) + "\n");
+                builder.append("verify ").append(attestation.toString()).append(strResult(verbosity, this.msg, null)).append("\n");
 
                 if (attestation instanceof BitcoinBlockHeaderAttestation) {
                     String tx = Utils.bytesToHex(Utils.arrayReverse(this.msg));
-                    builder.append(Timestamp.indention(indent) + "# Bitcoin block merkle root " + tx.toLowerCase() + "\n");
+                    builder.append(Timestamp.indention(indent)).append("# Bitcoin block merkle root ").append(tx.toLowerCase()).append("\n");
                 }
             }
         }
@@ -378,7 +378,8 @@ public class Timestamp {
                 try {
                     Transaction transaction = new Transaction(NetworkParameters.prodNet(), this.msg);
                     byte[] tx = Utils.arrayReverse(new OpSHA256().call(new OpSHA256().call(this.msg)));
-                    builder.append(Timestamp.indention(indent) + "# Bitcoin transaction id " + Utils.bytesToHex(tx).toLowerCase() + "\n");
+                    builder.append(Timestamp.indention(indent)).append("# Bitcoin transaction id ");
+                    builder.append(Utils.bytesToHex(tx).toLowerCase()).append("\n");
                 } catch (Exception err) {
                     // TODO: Is this intentional?
                 }
@@ -390,7 +391,8 @@ public class Timestamp {
                     curPar = ((OpBinary) op).arg;
                 }
 
-                builder.append(Timestamp.indention(indent) + " -> " + op.toString().toLowerCase() + strResult(verbosity, curPar, curRes).toLowerCase() + "\n");
+                builder.append(Timestamp.indention(indent)).append(" -> ").append(op.toString().toLowerCase());
+                builder.append(strResult(verbosity, curPar, curRes).toLowerCase()).append("\n");
                 builder.append(timestamp.strTree(indent + 1, verbosity));
             }
         } else if (!this.ops.isEmpty()) {
@@ -401,7 +403,8 @@ public class Timestamp {
                 try {
                     Transaction transaction = new Transaction(NetworkParameters.prodNet(), this.msg);
                     byte[] tx = Utils.arrayReverse(new OpSHA256().call(new OpSHA256().call(this.msg)));
-                    builder.append(Timestamp.indention(indent) + "# Bitcoin transaction id " + Utils.bytesToHex(tx).toLowerCase() + "\n");
+                    builder.append(Timestamp.indention(indent)).append("# Bitcoin transaction id ");
+                    builder.append(Utils.bytesToHex(tx).toLowerCase()).append("\n");
                 } catch (Exception err) {
                     // TODO: Is this intentional?
                 }
@@ -413,7 +416,8 @@ public class Timestamp {
                     curPar = ((OpBinary) op).arg;
                 }
 
-                builder.append(Timestamp.indention(indent) + op.toString().toLowerCase() + strResult(verbosity, curPar, curRes).toLowerCase() + "\n");
+                builder.append(Timestamp.indention(indent)).append(op.toString().toLowerCase());
+                builder.append(strResult(verbosity, curPar, curRes).toLowerCase()).append("\n");
                 builder.append(timestamp.strTree(indent, verbosity));
             }
         }
