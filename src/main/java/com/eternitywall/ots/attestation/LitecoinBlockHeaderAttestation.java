@@ -31,9 +31,9 @@ public class LitecoinBlockHeaderAttestation extends TimeAttestation {
         return height;
     }
 
-    public LitecoinBlockHeaderAttestation(int height_) {
+    public LitecoinBlockHeaderAttestation(int height) {
         super();
-        this.height = height_;
+        this.height = height;
     }
 
     public static LitecoinBlockHeaderAttestation deserialize(StreamDeserializationContext ctxPayload) {

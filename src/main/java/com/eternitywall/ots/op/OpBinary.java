@@ -28,9 +28,9 @@ public abstract class OpBinary extends Op implements Comparable<Op> {
         this.arg = new byte[]{};
     }
 
-    public OpBinary(byte[] arg_) {
+    public OpBinary(byte[] arg) {
         super();
-        this.arg = arg_;
+        this.arg = arg;
     }
 
     public static Op deserializeFromTag(StreamDeserializationContext ctx, byte tag) {

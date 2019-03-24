@@ -49,9 +49,9 @@ public class PendingAttestation extends TimeAttestation {
         return uri;
     }
 
-    public PendingAttestation(byte[] uri_) {
+    public PendingAttestation(byte[] uri) {
         super();
-        this.uri = uri_;
+        this.uri = uri;
     }
 
     public static boolean checkUri(byte[] uri) {

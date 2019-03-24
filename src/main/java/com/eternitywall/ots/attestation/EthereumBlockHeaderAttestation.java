@@ -29,9 +29,9 @@ public class EthereumBlockHeaderAttestation extends TimeAttestation {
         return height;
     }
 
-    EthereumBlockHeaderAttestation(int height_) {
+    EthereumBlockHeaderAttestation(int height) {
         super();
-        this.height = height_;
+        this.height = height;
     }
 
     public static EthereumBlockHeaderAttestation deserialize(StreamDeserializationContext ctxPayload) {

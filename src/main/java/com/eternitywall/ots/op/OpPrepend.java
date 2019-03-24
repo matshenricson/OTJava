@@ -34,9 +34,9 @@ public class OpPrepend extends OpBinary {
         this.arg = new byte[]{};
     }
 
-    public OpPrepend(byte[] arg_) {
-        super(arg_);
-        this.arg = arg_;
+    public OpPrepend(byte[] arg) {
+        super(arg);
+        this.arg = arg;
     }
 
     @Override
