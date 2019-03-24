@@ -57,20 +57,18 @@ public class LitecoinBlockHeaderAttestation extends TimeAttestation {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof LitecoinBlockHeaderAttestation)) {
+    public boolean equals(Object other) {
+        if (!(other instanceof LitecoinBlockHeaderAttestation)) {
             return false;
         }
 
-        if (!Arrays.equals(this._TAG(), ((LitecoinBlockHeaderAttestation) obj)._TAG())) {
+        LitecoinBlockHeaderAttestation that = (LitecoinBlockHeaderAttestation) other;
+
+        if (!Arrays.equals(this._TAG(), that._TAG())) {
             return false;
         }
 
-        if (this.height != ((LitecoinBlockHeaderAttestation) obj).height) {
-            return false;
-        }
-
-        return true;
+        return this.height == that.height;
     }
 
     @Override

@@ -53,8 +53,8 @@ public class OpRIPEMD160 extends OpCrypto {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof OpRIPEMD160);
+    public boolean equals(Object other) {
+        return (other instanceof OpRIPEMD160);
     }
 
     @Override

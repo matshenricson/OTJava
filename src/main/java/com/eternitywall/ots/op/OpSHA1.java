@@ -53,8 +53,8 @@ public class OpSHA1 extends OpCrypto {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof OpSHA1);
+    public boolean equals(Object other) {
+        return (other instanceof OpSHA1);
     }
 
     @Override

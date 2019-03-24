@@ -47,8 +47,8 @@ public class OpSHA256 extends OpCrypto {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof OpSHA256);
+    public boolean equals(Object other) {
+        return (other instanceof OpSHA256);
     }
 
     @Override

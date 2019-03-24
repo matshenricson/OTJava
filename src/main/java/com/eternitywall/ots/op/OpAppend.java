@@ -46,12 +46,12 @@ public class OpAppend extends OpBinary {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof OpAppend)) {
+    public boolean equals(Object other) {
+        if (!(other instanceof OpAppend)) {
             return false;
         }
 
-        return Arrays.equals(this.arg, ((OpAppend) obj).arg);
+        return Arrays.equals(this.arg, ((OpAppend) other).arg);
     }
 
     @Override

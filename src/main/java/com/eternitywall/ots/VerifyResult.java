@@ -4,6 +4,7 @@ import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Class that lets us compare, sort, store and print timestamps.
@@ -43,9 +44,14 @@ public class VerifyResult implements Comparable<VerifyResult> {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        VerifyResult vr = (VerifyResult) obj;
-        return this.timestamp == vr.timestamp && this.height == vr.height;
+    public boolean equals(Object other) {
+        if (!(other instanceof VerifyResult)) {
+            return false;
+        }
+
+        VerifyResult that = (VerifyResult) other;
+
+        return Objects.equals(this.timestamp, that.timestamp) && this.height == that.height;
     }
 
     @Override

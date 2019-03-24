@@ -102,20 +102,18 @@ public class PendingAttestation extends TimeAttestation {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof PendingAttestation)) {
+    public boolean equals(Object other) {
+        if (!(other instanceof PendingAttestation)) {
             return false;
         }
 
-        if (!Arrays.equals(this._TAG(), ((PendingAttestation) obj)._TAG())) {
+        PendingAttestation that = (PendingAttestation) other;
+
+        if (!Arrays.equals(this._TAG(), that._TAG())) {
             return false;
         }
 
-        if (!Arrays.equals(this.uri, ((PendingAttestation) obj).uri)) {
-            return false;
-        }
-
-        return true;
+        return Arrays.equals(this.uri, that.uri);
     }
 
     @Override

@@ -31,16 +31,16 @@ public class BlockHeader {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
+    public boolean equals(Object other) {
+        if (!(other instanceof BlockHeader)) {
             return false;
         }
 
-        BlockHeader that = (BlockHeader) o;
+        if (this == other) {
+            return true;
+        }
+
+        BlockHeader that = (BlockHeader) other;
 
         if (merkleroot != null ? !merkleroot.equals(that.merkleroot) : that.merkleroot != null) {
             return false;

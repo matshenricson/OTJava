@@ -54,7 +54,7 @@ public class OpKECCAK256 extends OpCrypto {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof OpKECCAK256);
+    public boolean equals(Object other) {
+        return (other instanceof OpKECCAK256);
     }
 }
