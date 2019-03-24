@@ -1,6 +1,5 @@
 package com.eternitywall.http;
 
-import com.eternitywall.ots.MultiInsight;
 import com.eternitywall.ots.Utils;
 
 import java.io.DataOutputStream;
