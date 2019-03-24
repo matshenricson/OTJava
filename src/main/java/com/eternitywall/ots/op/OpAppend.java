@@ -4,7 +4,6 @@ import com.eternitywall.ots.StreamDeserializationContext;
 import com.eternitywall.ots.Utils;
 
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 /**
  * Append a suffix to a message.
@@ -12,8 +11,6 @@ import java.util.logging.Logger;
  * @see OpBinary
  */
 public class OpAppend extends OpBinary {
-
-    private static Logger log = Utils.getLogger(OpAppend.class.getName());
 
     public static final byte _TAG = (byte) 0xf0;
 

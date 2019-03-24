@@ -5,7 +5,6 @@ import com.eternitywall.ots.StreamSerializationContext;
 import com.eternitywall.ots.Utils;
 
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 /**
  * Placeholder for attestations that don't support
@@ -13,8 +12,6 @@ import java.util.logging.Logger;
  * @see TimeAttestation
  */
 public class UnknownAttestation extends TimeAttestation {
-
-    private static Logger log = Utils.getLogger(UnknownAttestation.class.getName());
 
     byte[] payload;
     public static byte[] _TAG = new byte[]{};     // TODO: Static ???

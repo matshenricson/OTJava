@@ -246,7 +246,7 @@ public class OpenTimestamps {
             }
         }
 
-        int count = 0;
+        int count;
 
         for (count = 0; count < capacity && count < m; count++) {
             try {

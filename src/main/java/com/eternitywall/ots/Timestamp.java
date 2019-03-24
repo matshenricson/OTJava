@@ -10,7 +10,6 @@ import org.bitcoinj.core.Transaction;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.logging.Logger;
 
 /**
  * Proof that one or more attestations commit to a message.
@@ -19,8 +18,6 @@ import java.util.logging.Logger;
  * attestations that attest to the time that messages in the tree existed prior.
  */
 public class Timestamp {
-
-    private static Logger log = Utils.getLogger(Timestamp.class.getName());
 
     public byte[] msg;
     public List<TimeAttestation> attestations;
