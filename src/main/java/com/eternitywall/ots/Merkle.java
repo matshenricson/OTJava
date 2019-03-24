@@ -79,7 +79,7 @@ public class Merkle {
                 }
             }
 
-            if (nextStamps.size() == 0) {
+            if (nextStamps.isEmpty()) {
                 exit = true;
             } else {
                 if (prevStamp != null) {

@@ -191,11 +191,11 @@ public class Timestamp {
         // Get all attestations
         HashMap<byte[], TimeAttestation> allAttestations = this.allAttestations();
 
-        if (allAttestations.size() == 0) {
+        if (allAttestations.isEmpty()) {
             throw new Exception();
         } else if (allAttestations.size() == 1) {
             return allAttestations.values().iterator().next();
-        } else if (this.ops.size() == 0) {
+        } else if (this.ops.isEmpty()) {
             throw new Exception();     // TODO: Need a descriptive exception string here
         }
 
@@ -521,7 +521,7 @@ public class Timestamp {
     public Set<byte[]> allTips() {
         Set<byte[]> set = new HashSet<>();
 
-        if (this.ops.size() == 0) {
+        if (this.ops.isEmpty()) {
             set.add(this.msg);
         }
 
