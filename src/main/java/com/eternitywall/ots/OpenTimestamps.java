@@ -139,7 +139,7 @@ public class OpenTimestamps {
     public static Timestamp stamp(List<DetachedTimestampFile> fileTimestamps, List<String> calendarsUrl, Integer m, HashMap<String, String> privateCalendarsUrl) throws IOException {
         // Parse parameters
         if (fileTimestamps == null || fileTimestamps.isEmpty()) {
-            throw new IOException();
+            throw new IOException("No fileTimestamps available: " + fileTimestamps);
         }
 
         if (privateCalendarsUrl == null) {
@@ -229,7 +229,7 @@ public class OpenTimestamps {
                 task.setQueue(queue);
                 executor.submit(task);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.warning("Could not submit to private calendar: " + e.toString());
             }
         }
 
@@ -242,7 +242,7 @@ public class OpenTimestamps {
                 task.setQueue(queue);
                 executor.submit(task);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.warning("Could not submit to public calendar: " + e.toString());
             }
         }
 
@@ -256,11 +256,11 @@ public class OpenTimestamps {
                     try {
                         timestamp.merge(optionalStamp.get());
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.warning("Could not merge timestamp: " + e.toString());     // TODO: Should we rethrow?
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                log.warning("Could not take timestamp: " + e.toString());     // TODO: Should we rethrow?
             }
         }
 
@@ -288,12 +288,11 @@ public class OpenTimestamps {
             try {
                 bytesRandom16 = Utils.randBytes(16);
             } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
+                log.severe("Could not fetch random bytes: " + e.toString());
+                // TODO: This is not nice, now the code will blow up much later
             }
 
-            // nonce_appended_stamp = file_timestamp.timestamp.ops.add(com.eternitywall.ots.op.OpAppend(os.urandom(16)))
             Timestamp nonceAppendedStamp = fileTimestamp.timestamp.add(new OpAppend(bytesRandom16));
-            // merkle_root = nonce_appended_stamp.ops.add(com.eternitywall.ots.op.OpSHA256())
             Timestamp merkleRoot = nonceAppendedStamp.add(new OpSHA256());
             merkleRoots.add(merkleRoot);
         }
@@ -409,7 +408,7 @@ public class OpenTimestamps {
                 log.info("Lite-client verification, assuming block " + blockHash + " is valid");
                 insight.getExecutor().shutdown();
             } catch (Exception e2) {
-                e2.printStackTrace();
+                log.severe("Could not verify: " + e2.toString());
                 throw e2;
             }
         }
@@ -436,9 +435,9 @@ public class OpenTimestamps {
             blockInfo = insight.block(blockHash);
             log.info("Lite-client verification, assuming block " + blockHash + " is valid");
             insight.getExecutor().shutdown();
-        } catch (Exception e2) {
-            e2.printStackTrace();
-            throw e2;
+        } catch (Exception e) {
+            log.severe("Could not verify: " + e.toString());
+            throw e;
         }
 
         return attestation.verifyAgainstBlockheader(Utils.arrayReverse(msg), blockInfo);
@@ -491,7 +490,7 @@ public class OpenTimestamps {
 
                         upgraded = true;
                     } catch (Exception e) {
-                        log.info(e.getMessage());
+                        log.severe("Could not upgrade an incomplete timestamp to make it verifiable: " + e.toString());
                     }
                 }
             }

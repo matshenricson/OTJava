@@ -158,7 +158,7 @@ public class DetachedTimestampFile {
      */
     public static DetachedTimestampFile from(InputStream inputStream) throws Exception {
         if (inputStream == null) {
-            throw new Exception();     // TODO: Add exception string later on
+            throw new Exception("The input stream is null, cannot read DetachedTimestampFile");
         }
 
         try {

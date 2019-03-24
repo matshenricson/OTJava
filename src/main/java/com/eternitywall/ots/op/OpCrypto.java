@@ -50,8 +50,7 @@ public class OpCrypto extends OpUnary {
 
             return hash;
         } catch (NoSuchAlgorithmException e) {
-            log.severe("NoSuchAlgorithmException");
-            e.printStackTrace();
+            log.severe("NoSuchAlgorithmException:" + e);
 
             return new byte[]{};     // TODO: Is this OK? Won't it blow up later? Better to throw?
         }
@@ -75,7 +74,7 @@ public class OpCrypto extends OpUnary {
         return hashFd(new FileInputStream(file));
     }
 
-    public byte[] hashFd(byte[] bytes) throws IOException, NoSuchAlgorithmException {
+    public byte[] hashFd(byte[] bytes) throws NoSuchAlgorithmException {
         StreamDeserializationContext ctx = new StreamDeserializationContext(bytes);
 
         return hashFd(ctx);
