@@ -30,7 +30,7 @@ public class StreamSerializationContext {
     }
 
     public void writeBool(boolean value) {
-        if (value == true) {
+        if (value) {
             this.writeByte((byte) 0xff);
         } else {
             this.writeByte((byte) 0x00);

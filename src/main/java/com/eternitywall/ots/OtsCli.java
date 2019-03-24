@@ -372,7 +372,7 @@ public class OtsCli {
 
             boolean changed = OpenTimestamps.upgrade(detachedOts);
 
-            if (shrink == true) {
+            if (shrink) {
                 detachedOts.getTimestamp().shrink();
             }
 

@@ -42,13 +42,13 @@ public abstract class TimeAttestation implements Comparable<TimeAttestation> {
         StreamDeserializationContext ctxPayload = new StreamDeserializationContext(serializedAttestation);
 
         /* eslint no-use-before-define: ["error", { "classes": false }] */
-        if (Arrays.equals(tag, PendingAttestation._TAG) == true) {
+        if (Arrays.equals(tag, PendingAttestation._TAG)) {
             return PendingAttestation.deserialize(ctxPayload);
-        } else if (Arrays.equals(tag, BitcoinBlockHeaderAttestation._TAG) == true) {
+        } else if (Arrays.equals(tag, BitcoinBlockHeaderAttestation._TAG)) {
             return BitcoinBlockHeaderAttestation.deserialize(ctxPayload);
-        } else if (Arrays.equals(tag, LitecoinBlockHeaderAttestation._TAG) == true) {
+        } else if (Arrays.equals(tag, LitecoinBlockHeaderAttestation._TAG)) {
             return LitecoinBlockHeaderAttestation.deserialize(ctxPayload);
-        } else if (Arrays.equals(tag, EthereumBlockHeaderAttestation._TAG) == true) {
+        } else if (Arrays.equals(tag, EthereumBlockHeaderAttestation._TAG)) {
             return EthereumBlockHeaderAttestation.deserialize(ctxPayload);
         }
 

@@ -237,7 +237,7 @@ public class Timestamp {
             Op op = entry.getKey();
             Set<TimeAttestation> attestations = timestamp.getAttestations();
 
-            if (attestations.size() > 0 && attestations.contains(minAttestation) && shrinked == false) {
+            if (attestations.size() > 0 && attestations.contains(minAttestation) && !shrinked) {
                 timestamp.shrink();
                 shrinked = true;
             } else {
@@ -324,7 +324,7 @@ public class Timestamp {
 
         String rr = "";
 
-        if (verbosity == true && result != null) {
+        if (verbosity && result != null) {
             rr += " == ";
             String resultHex = Utils.bytesToHex(result);
 
@@ -546,7 +546,7 @@ public class Timestamp {
      * @return Returns true if timestamps are equals
      */
     public boolean equals(Timestamp timestamp) {
-        if (Arrays.equals(this.getDigest(), timestamp.getDigest()) == false) {
+        if (!Arrays.equals(this.getDigest(), timestamp.getDigest())) {
             return false;
         }
 
