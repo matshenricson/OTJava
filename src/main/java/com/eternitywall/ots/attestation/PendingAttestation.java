@@ -30,20 +30,19 @@ import java.util.logging.Logger;
  */
 public class PendingAttestation extends TimeAttestation {
 
+    public static final int _MAX_URI_LENGTH = 1000;
+    public static final String _ALLOWED_URI_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._/:";
+
     private static Logger log = Utils.getLogger(PendingAttestation.class.getName());
 
-    public static byte[] _TAG = {(byte) 0x83, (byte) 0xdf, (byte) 0xe3, (byte) 0x0d, (byte) 0x2e, (byte) 0xf9, (byte) 0x0c, (byte) 0x8e};
+    public static final byte[] _TAG = {(byte) 0x83, (byte) 0xdf, (byte) 0xe3, (byte) 0x0d, (byte) 0x2e, (byte) 0xf9, (byte) 0x0c, (byte) 0x8e};
+
+    private byte[] uri;
 
     @Override
     public byte[] _TAG() {
         return PendingAttestation._TAG;
     }
-
-    public static int _MAX_URI_LENGTH = 1000;
-
-    public static String _ALLOWED_URI_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._/:";
-
-    private byte[] uri;
 
     public byte[] getUri() {
         return uri;

@@ -356,8 +356,6 @@ public class OtsCli {
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-
-                return;
             }
         } catch (Exception e) {
             log.severe("No valid file");

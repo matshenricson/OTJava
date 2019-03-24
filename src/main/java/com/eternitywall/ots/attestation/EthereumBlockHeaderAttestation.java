@@ -2,10 +2,8 @@ package com.eternitywall.ots.attestation;
 
 import com.eternitywall.ots.StreamDeserializationContext;
 import com.eternitywall.ots.StreamSerializationContext;
-import com.eternitywall.ots.Utils;
 
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 /**
  * Ethereum Block Header Attestation.
@@ -14,16 +12,15 @@ import java.util.logging.Logger;
  */
 public class EthereumBlockHeaderAttestation extends TimeAttestation {
 
-    public static byte[] _TAG = {(byte) 0x30, (byte) 0xfe, (byte) 0x80, (byte) 0x87, (byte) 0xb5, (byte) 0xc7, (byte) 0xea, (byte) 0xd7};
-    private static Logger log = Utils.getLogger(EthereumBlockHeaderAttestation.class.getName());
-    public static String chain = "ethereum";
+    public static final byte[] _TAG = {(byte) 0x30, (byte) 0xfe, (byte) 0x80, (byte) 0x87, (byte) 0xb5, (byte) 0xc7, (byte) 0xea, (byte) 0xd7};
+    public static final String chain = "ethereum";
+
+    private int height;
 
     @Override
     public byte[] _TAG() {
         return EthereumBlockHeaderAttestation._TAG;
     }
-
-    private int height = 0;
 
     public int getHeight() {
         return height;

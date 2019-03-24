@@ -5,18 +5,14 @@ import com.eternitywall.ots.StreamSerializationContext;
 import com.eternitywall.ots.Utils;
 
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 /**
  * Class representing {@link com.eternitywall.ots.Timestamp} signature verification
  */
 public abstract class TimeAttestation implements Comparable<TimeAttestation> {
 
-    private static Logger log = Utils.getLogger(TimeAttestation.class.getName());
-
-    public static int _TAG_SIZE = 8;
-
-    public static int _MAX_PAYLOAD_SIZE = 8192;
+    public static final int _TAG_SIZE = 8;
+    public static final int _MAX_PAYLOAD_SIZE = 8192;
 
     public byte[] _TAG;
 

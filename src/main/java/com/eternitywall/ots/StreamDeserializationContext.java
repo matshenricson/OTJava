@@ -8,7 +8,7 @@ public class StreamDeserializationContext {
     private static Logger log = Utils.getLogger(StreamDeserializationContext.class.getName());
 
     byte[] buffer;
-    int counter = 0;
+    int counter;
 
     public StreamDeserializationContext(byte[] stream) {
         this.buffer = stream;

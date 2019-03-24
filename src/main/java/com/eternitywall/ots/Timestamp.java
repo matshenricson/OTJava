@@ -125,7 +125,7 @@ public class Timestamp {
             if (!sortedAttestations.isEmpty()) {
                 sortedAttestations.get(sortedAttestations.size() - 1).serialize(ctx);
             }
-        } else if (!this.ops.isEmpty()) {
+        } else {
             if (!sortedAttestations.isEmpty()) {
                 ctx.writeBytes(new byte[]{(byte) 0xff, (byte) 0x00});
                 sortedAttestations.get(sortedAttestations.size() - 1).serialize(ctx);
@@ -182,17 +182,17 @@ public class Timestamp {
 
     /**
      * Shrink Timestamp.
-     * Remove useless pending attestions if exist a full bitcoin attestation.
+     * Remove useless pending attestation if exist a full bitcoin attestation.
      *
      * @return TimeAttestation - the minimal attestation.
-     * @throws Exception no attestion founds.
+     * @throws Exception no attestation founds.
      */
     public TimeAttestation shrink() throws Exception {
         // Get all attestations
         HashMap<byte[], TimeAttestation> allAttestations = this.allAttestations();
 
         if (allAttestations.isEmpty()) {
-            throw new Exception();
+            throw new Exception();     // TODO: Need a descriptive exception string here
         } else if (allAttestations.size() == 1) {
             return allAttestations.values().iterator().next();
         } else if (this.ops.isEmpty()) {
@@ -205,7 +205,6 @@ public class Timestamp {
 
         for (Map.Entry<Op, Timestamp> entry : this.ops.entrySet()) {
             Timestamp timestamp = entry.getValue();
-            //Op op = entry.getKey();
 
             for (TimeAttestation attestation : timestamp.getAttestations()) {
                 if (attestation instanceof BitcoinBlockHeaderAttestation) {
@@ -234,10 +233,9 @@ public class Timestamp {
         for (Iterator<Entry<Op, Timestamp>> it = this.ops.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<Op, Timestamp> entry = it.next();
             Timestamp timestamp = entry.getValue();
-            Op op = entry.getKey();
             Set<TimeAttestation> attestations = timestamp.getAttestations();
 
-            if (attestations.size() > 0 && attestations.contains(minAttestation) && !shrinked) {
+            if (!attestations.isEmpty() && attestations.contains(minAttestation) && !shrinked) {
                 timestamp.shrink();
                 shrinked = true;
             } else {
@@ -312,16 +310,16 @@ public class Timestamp {
         return strTree(indent, false);
     }
 
-    private String strResult(boolean verbosity, byte[] parameter, byte[] result) {
-        final String ANSI_HEADER = "\u001B[95m";
-        final String ANSI_OKBLUE = "\u001B[94m";
-        final String ANSI_OKGREEN = "\u001B[92m";
-        final String ANSI_WARNING = "\u001B[93m";
-        final String ANSI_FAIL = "\u001B[91m";
-        final String ANSI_ENDC = "\u001B[0m";
-        final String ANSI_BOLD = "\u001B[1m";
-        final String ANSI_UNDERLINE = "\u001B[4m";
+    private static final String ANSI_HEADER = "\u001B[95m";
+    private static final String ANSI_OKBLUE = "\u001B[94m";
+    private static final String ANSI_OKGREEN = "\u001B[92m";
+    private static final String ANSI_WARNING = "\u001B[93m";
+    private static final String ANSI_FAIL = "\u001B[91m";
+    private static final String ANSI_ENDC = "\u001B[0m";
+    private static final String ANSI_BOLD = "\u001B[1m";
+    private static final String ANSI_UNDERLINE = "\u001B[4m";
 
+    private String strResult(boolean verbosity, byte[] parameter, byte[] result) {
         String rr = "";
 
         if (verbosity && result != null) {
@@ -385,6 +383,7 @@ public class Timestamp {
                     byte[] tx = Utils.arrayReverse(new OpSHA256().call(new OpSHA256().call(this.msg)));
                     builder.append(Timestamp.indention(indent) + "# Bitcoin transaction id " + Utils.bytesToHex(tx).toLowerCase() + "\n");
                 } catch (Exception err) {
+                    // TODO: Is this intentional?
                 }
 
                 byte[] curRes = op.call(this.msg);
@@ -397,8 +396,7 @@ public class Timestamp {
                 builder.append(Timestamp.indention(indent) + " -> " + op.toString().toLowerCase() + strResult(verbosity, curPar, curRes).toLowerCase() + "\n");
                 builder.append(timestamp.strTree(indent + 1, verbosity));
             }
-        } else if (this.ops.size() > 0) {
-            // output += com.eternitywall.ots.Timestamp.indention(indent);
+        } else if (!this.ops.isEmpty()) {
             for (Map.Entry<Op, Timestamp> entry : this.ops.entrySet()) {
                 Timestamp timestamp = entry.getValue();
                 Op op = entry.getKey();
@@ -408,6 +406,7 @@ public class Timestamp {
                     byte[] tx = Utils.arrayReverse(new OpSHA256().call(new OpSHA256().call(this.msg)));
                     builder.append(Timestamp.indention(indent) + "# Bitcoin transaction id " + Utils.bytesToHex(tx).toLowerCase() + "\n");
                 } catch (Exception err) {
+                    // TODO: Is this intentional?
                 }
 
                 byte[] curRes = op.call(this.msg);
@@ -456,10 +455,9 @@ public class Timestamp {
      * @return Set of all timestamp attestations.
      */
     public Set<TimeAttestation> getAttestations() {
-        Set set = new HashSet<TimeAttestation>();
+        Set<TimeAttestation> set = new HashSet<>();
 
         for (Map.Entry<byte[], TimeAttestation> item : this.allAttestations().entrySet()) {
-            //byte[] msg = item.getKey();
             TimeAttestation attestation = item.getValue();
             set.add(attestation);
         }
@@ -499,8 +497,6 @@ public class Timestamp {
 
         for (Map.Entry<Op, Timestamp> entry : this.ops.entrySet()) {
             Timestamp ts = entry.getValue();
-            //Op op = entry.getKey();
-
             HashMap<byte[], TimeAttestation> subMap = ts.allAttestations();
 
             for (Map.Entry<byte[], TimeAttestation> item : subMap.entrySet()) {
@@ -554,6 +550,8 @@ public class Timestamp {
         if (this.attestations.size() != timestamp.attestations.size()) {
             return false;
         }
+
+        // TODO: Don't we need to order the attestations before we compare?
 
         for (int i = 0; i < this.attestations.size(); i++) {
             TimeAttestation ta1 = this.attestations.get(i);

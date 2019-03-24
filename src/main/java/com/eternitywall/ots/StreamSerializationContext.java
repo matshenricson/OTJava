@@ -9,7 +9,7 @@ public class StreamSerializationContext {
 
     private static Logger log = Utils.getLogger(StreamSerializationContext.class.getName());
 
-    List<Byte> buffer = new ArrayList<>();
+    List<Byte> buffer;
 
     public StreamSerializationContext() {
         this.buffer = new ArrayList<>();
@@ -60,7 +60,7 @@ public class StreamSerializationContext {
     }
 
     public void writeByte(byte value) {
-        this.buffer.add(new Byte(value));
+        this.buffer.add(value);
     }
 
     public void writeByte(Byte value) {

@@ -16,7 +16,7 @@ public class OpSHA256 extends OpCrypto {
 
     private static Logger log = Utils.getLogger(OpSHA256.class.getName());
 
-    public static byte _TAG = 0x08;
+    public static final byte _TAG = 0x08;
 
     @Override
     public byte _TAG() {

@@ -22,7 +22,7 @@ public class OpSHA1 extends OpCrypto {
 
     private static Logger log = Utils.getLogger(OpSHA1.class.getName());
 
-    public static byte _TAG = 0x02;
+    public static final byte _TAG = 0x02;
 
     @Override
     public byte _TAG() {

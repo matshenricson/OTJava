@@ -15,9 +15,9 @@ public class OpAppend extends OpBinary {
 
     private static Logger log = Utils.getLogger(OpAppend.class.getName());
 
-    byte[] arg;
+    public static final byte _TAG = (byte) 0xf0;
 
-    public static byte _TAG = (byte) 0xf0;
+    byte[] arg;
 
     @Override
     public byte _TAG() {

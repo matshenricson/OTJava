@@ -18,7 +18,7 @@ public class OpKECCAK256 extends OpCrypto {
     private static Logger log = Utils.getLogger(OpKECCAK256.class.getName());
     private KeccakDigest digest = new KeccakDigest(256);
 
-    public static byte _TAG = (byte) 103;
+    public static final byte _TAG = (byte) 103;
 
     @Override
     public byte _TAG() {

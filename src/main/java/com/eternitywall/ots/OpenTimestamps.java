@@ -146,8 +146,8 @@ public class OpenTimestamps {
             privateCalendarsUrl = new HashMap<>();
         }
 
-        if ((calendarsUrl == null || calendarsUrl.isEmpty()) && (privateCalendarsUrl.isEmpty())) {
-            calendarsUrl = new ArrayList<String>();
+        if ((calendarsUrl == null || calendarsUrl.isEmpty()) && privateCalendarsUrl.isEmpty()) {
+            calendarsUrl = new ArrayList<>();
             calendarsUrl.add("https://alice.btc.calendar.opentimestamps.org");
             calendarsUrl.add("https://bob.btc.calendar.opentimestamps.org");
             calendarsUrl.add("https://finney.calendar.eternitywall.com");
@@ -168,7 +168,7 @@ public class OpenTimestamps {
             throw new IOException();
         }
 
-        // Build markle tree
+        // Build merkle tree
         Timestamp merkleTip = OpenTimestamps.makeMerkleTree(fileTimestamps);
 
         if (merkleTip == null) {
@@ -178,7 +178,7 @@ public class OpenTimestamps {
         // Stamping
         Timestamp resultTimestamp = OpenTimestamps.create(merkleTip, calendarsUrl, m, privateCalendarsUrl);
 
-        if (resultTimestamp == null) {
+        if (resultTimestamp == null) {    // TODO: I don't think this is possible...
             throw new IOException();
         }
 
@@ -268,7 +268,6 @@ public class OpenTimestamps {
             log.severe("Failed to create timestamp: requested " + String.valueOf(m) + " attestation" + ((m > 1) ? "s" : "") + " but received only " + String.valueOf(count));
         }
 
-        //shut down the executor service now
         executor.shutdown();
 
         return timestamp;
@@ -404,7 +403,7 @@ public class OpenTimestamps {
             log.fine("There is no local node available");
 
             try {
-                MultiInsight insight = new MultiInsight(attestation.chain);
+                MultiInsight insight = new MultiInsight(BitcoinBlockHeaderAttestation.chain);
                 String blockHash = insight.blockHash(height);
                 blockInfo = insight.block(blockHash);
                 log.info("Lite-client verification, assuming block " + blockHash + " is valid");
@@ -432,8 +431,8 @@ public class OpenTimestamps {
         BlockHeader blockInfo;
 
         try {
-            MultiInsight insight = new MultiInsight(attestation.chain);
-            String blockHash = blockHash = insight.blockHash(height);
+            MultiInsight insight = new MultiInsight(LitecoinBlockHeaderAttestation.chain);
+            String blockHash = insight.blockHash(height);
             blockInfo = insight.block(blockHash);
             log.info("Lite-client verification, assuming block " + blockHash + " is valid");
             insight.getExecutor().shutdown();

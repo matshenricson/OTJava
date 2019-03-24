@@ -9,6 +9,8 @@ import java.util.Locale;
  * Class that lets us compare, sort, store and print timestamps.
  */
 public class VerifyResult implements Comparable<VerifyResult> {
+    private static final String DATE_PATTERN = "YYYY-MM-dd z";
+    private static final DateFormatSymbols DATE_FORMAT_SYMBOLS = new DateFormatSymbols(new Locale("en", "UK"));
     public static enum Chains {
         BITCOIN, LITECOIN, ETHEREUM
     }
@@ -29,10 +31,7 @@ public class VerifyResult implements Comparable<VerifyResult> {
             return "";
         }
 
-        String pattern = "YYYY-MM-dd z";
-        Locale locale = new Locale("en", "UK");
-        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(locale);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, dateFormatSymbols);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_PATTERN, DATE_FORMAT_SYMBOLS);
         String string = simpleDateFormat.format(new Date(timestamp * 1000));
 
         return "block " + String.valueOf(height) + " attests data existed as of " + string;

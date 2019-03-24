@@ -90,6 +90,7 @@ public class Calendar {
             }
 
             StreamDeserializationContext ctx = new StreamDeserializationContext(body);
+
             return Timestamp.deserialize(ctx, digest);
         } catch (Exception e) {
             throw new UrlException(e.getMessage());

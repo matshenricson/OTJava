@@ -17,8 +17,7 @@ public class UnknownAttestation extends TimeAttestation {
     private static Logger log = Utils.getLogger(UnknownAttestation.class.getName());
 
     byte[] payload;
-
-    public static byte[] _TAG = new byte[]{};
+    public static byte[] _TAG = new byte[]{};     // TODO: Static ???
 
     @Override
     public byte[] _TAG() {

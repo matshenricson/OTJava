@@ -17,7 +17,7 @@ public class OpRIPEMD160 extends OpCrypto {
 
     private static Logger log = Utils.getLogger(OpRIPEMD160.class.getName());
 
-    public static byte _TAG = 0x03;
+    public static final byte _TAG = 0x03;
 
     @Override
     public byte _TAG() {

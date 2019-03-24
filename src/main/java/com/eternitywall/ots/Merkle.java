@@ -63,7 +63,7 @@ public class Merkle {
         boolean exit = false;
 
         while (!exit) {
-            if (stamps.size() > 0) {
+            if (!stamps.isEmpty()) {
                 prevStamp = stamps.get(0);
             }
 
