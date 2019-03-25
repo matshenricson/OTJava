@@ -50,7 +50,7 @@ public class TestOpenTimestamps {
     @Before
     public void loadData() throws ExecutionException, InterruptedException, IOException {
         // TODO: Isn't it much better to have these test files in test/resources ???
-        final String baseUrl = "https://raw.githubusercontent.com/opentimestamps/java-opentimestamps/master";
+        final String baseUrl = "https://raw.githubusercontent.com/matshenricson/otjava/master";
 
         executor = Executors.newFixedThreadPool(4);
         Future<Response> incompleteFuture                 = executor.submit(new Request(new URL(baseUrl + "/examples/incomplete.txt")));
