@@ -158,9 +158,7 @@ public class Timestamp {
             throw new Exception("Can\'t merge timestamps for different messages together");
         }
 
-        for (final TimeAttestation attestation : other.attestations) {
-            this.attestations.add(attestation);
-        }
+        this.attestations.addAll(other.attestations);
 
         for (Map.Entry<Op, Timestamp> entry : other.ops.entrySet()) {
             Timestamp otherOpStamp = entry.getValue();
@@ -439,12 +437,8 @@ public class Timestamp {
 
         List<Timestamp> list = new ArrayList<>();
 
-        for (Map.Entry<Op, Timestamp> entry : this.ops.entrySet()) {
-            Timestamp ts = entry.getValue();
-            //Op op = entry.getKey();
-
-            List<Timestamp> result = ts.directlyVerified();
-            list.addAll(result);
+        for (Timestamp ts : this.ops.values()) {
+            list.addAll(ts.directlyVerified());
         }
 
         return list;
@@ -522,15 +516,8 @@ public class Timestamp {
             set.add(this.msg);
         }
 
-        for (Map.Entry<Op, Timestamp> entry : this.ops.entrySet()) {
-            Timestamp ts = entry.getValue();
-            //Op op = entry.getKey();
-
-            Set<byte[]> subSet = ts.allTips();
-
-            for (byte[] msg : subSet) {
-                set.add(msg);
-            }
+        for (Timestamp ts : this.ops.values()) {
+            set.addAll(ts.allTips());
         }
 
         return set;
