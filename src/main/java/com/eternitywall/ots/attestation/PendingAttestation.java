@@ -60,8 +60,8 @@ public class PendingAttestation extends TimeAttestation {
             return false;
         }
 
-        for (int i = 0; i < uri.length; i++) {
-            Character c = String.format("%c", uri[i]).charAt(0);
+        for (byte b : uri) {
+            Character c = String.format("%c", b).charAt(0);
 
             if (PendingAttestation._ALLOWED_URI_CHARS.indexOf(c) < 0) {
                 log.severe("URI contains invalid character ");

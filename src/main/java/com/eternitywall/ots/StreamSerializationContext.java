@@ -65,8 +65,8 @@ public class StreamSerializationContext {
     }
 
     public void writeBytes(byte[] value) {
-        for (int i = 0; i < value.length; i++) {
-            this.writeByte(value[i]);
+        for (byte b : value) {
+            this.writeByte(b);
         }
     }
 

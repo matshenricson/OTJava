@@ -297,8 +297,7 @@ public class OpenTimestamps {
             merkleRoots.add(merkleRoot);
         }
 
-        Timestamp merkleTip = Merkle.makeMerkleTree(merkleRoots);
-        return merkleTip;
+        return Merkle.makeMerkleTree(merkleRoots);    // Merkle tip
     }
 
     /**
@@ -451,9 +450,7 @@ public class OpenTimestamps {
      * @throws Exception if the upgrading procedure fails.
      */
     public static boolean upgrade(DetachedTimestampFile detachedTimestamp) throws Exception {
-        // Upgrade timestamp
-        boolean changed = OpenTimestamps.upgrade(detachedTimestamp.timestamp);
-        return changed;
+        return OpenTimestamps.upgrade(detachedTimestamp.timestamp);
     }
 
     /**

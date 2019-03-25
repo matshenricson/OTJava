@@ -30,9 +30,7 @@ public class Merkle {
         //Timestamp leftPrependStamp = left.add(new OpAppend(right.msg));
         left.ops.put(new OpAppend(right.msg), rightPrependStamp);
 
-        // return rightPrependStamp.ops.add(unaryOpCls())
-        Timestamp res = rightPrependStamp.add(new OpSHA256());
-        return res;
+        return rightPrependStamp.add(new OpSHA256());
     }
 
     public static Timestamp catSha256(Timestamp left, Timestamp right) {
@@ -41,9 +39,7 @@ public class Merkle {
 
     public static Timestamp catSha256d(Timestamp left, Timestamp right) {
         Timestamp sha256Timestamp = Merkle.catSha256(left, right);
-        // res = sha256Timestamp.ops.add(OpSHA256());
-        Timestamp res = sha256Timestamp.add(new OpSHA256());
-        return res;
+        return sha256Timestamp.add(new OpSHA256());
     }
 
     /**

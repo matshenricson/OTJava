@@ -116,9 +116,7 @@ public class DetachedTimestampFile {
      * @return The generated com.eternitywall.ots.DetachedTimestampFile object.
      */
     public static DetachedTimestampFile deserialize(byte[] ots) {
-        StreamDeserializationContext ctx = new StreamDeserializationContext(ots);
-
-        return DetachedTimestampFile.deserialize(ctx);
+        return deserialize(new StreamDeserializationContext(ots));
     }
 
     /**
@@ -162,8 +160,7 @@ public class DetachedTimestampFile {
         }
 
         try {
-            DetachedTimestampFile fileTimestamp = DetachedTimestampFile.from(new OpSHA256(), inputStream);   // Read from file reader stream
-            return fileTimestamp;
+            return from(new OpSHA256(), inputStream);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             throw new Exception();

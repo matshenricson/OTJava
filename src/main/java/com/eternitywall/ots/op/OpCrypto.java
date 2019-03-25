@@ -46,9 +46,8 @@ public class OpCrypto extends OpUnary {
         // For Sha1 & Sha256 use java.security.MessageDigest library
         try {
             MessageDigest digest = MessageDigest.getInstance(this._HASHLIB_NAME());
-            byte[] hash = digest.digest(msg);
 
-            return hash;
+            return digest.digest(msg);   // The hash
         } catch (NoSuchAlgorithmException e) {
             log.severe("NoSuchAlgorithmException:" + e);
 
@@ -65,9 +64,7 @@ public class OpCrypto extends OpUnary {
             chunk = ctx.read(1048576);
         }
 
-        byte[] hash = digest.digest();
-
-        return hash;
+        return digest.digest();   // The hash
     }
 
     public byte[] hashFd(File file) throws IOException, NoSuchAlgorithmException {
@@ -91,8 +88,7 @@ public class OpCrypto extends OpUnary {
         }
 
         inputStream.close();
-        byte[] hash = digest.digest();
 
-        return hash;
+        return digest.digest();   // The hash
     }
 }
