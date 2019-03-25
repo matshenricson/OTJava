@@ -207,7 +207,6 @@ public class Timestamp {
                         minAttestation = attestation;
                     } else {
                         if (minAttestation instanceof BitcoinBlockHeaderAttestation
-                                && attestation instanceof BitcoinBlockHeaderAttestation
                                 && ((BitcoinBlockHeaderAttestation) minAttestation).getHeight()
                                 > ((BitcoinBlockHeaderAttestation) attestation).getHeight()) {
                             minAttestation = attestation;
