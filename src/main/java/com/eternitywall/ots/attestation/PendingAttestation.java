@@ -95,10 +95,14 @@ public class PendingAttestation extends TimeAttestation {
     }
 
     @Override
-    public int compareTo(TimeAttestation o) {
-        PendingAttestation opa = (PendingAttestation) o;
+    public int compareTo(TimeAttestation other) {
+        if (!(other instanceof PendingAttestation)) {
+            return this.getClass().getName().compareTo(other.getClass().getName());   // This makes the comparison symmetric
+        }
 
-        return Utils.compare(this.uri, opa.uri);
+        PendingAttestation that = (PendingAttestation) other;
+
+        return Utils.compare(this.uri, that.uri);
     }
 
     @Override

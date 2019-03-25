@@ -50,10 +50,14 @@ public class LitecoinBlockHeaderAttestation extends TimeAttestation {
     }
 
     @Override
-    public int compareTo(TimeAttestation o) {
-        LitecoinBlockHeaderAttestation ob = (LitecoinBlockHeaderAttestation) o;
+    public int compareTo(TimeAttestation other) {
+        if (!(other instanceof LitecoinBlockHeaderAttestation)) {
+            return this.getClass().getName().compareTo(other.getClass().getName());   // This makes the comparison symmetric
+        }
 
-        return this.height - ob.height;
+        LitecoinBlockHeaderAttestation that = (LitecoinBlockHeaderAttestation) other;
+
+        return this.height - that.height;
     }
 
     @Override

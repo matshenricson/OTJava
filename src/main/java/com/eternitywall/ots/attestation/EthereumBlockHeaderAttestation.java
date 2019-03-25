@@ -47,10 +47,14 @@ public class EthereumBlockHeaderAttestation extends TimeAttestation {
     }
 
     @Override
-    public int compareTo(TimeAttestation o) {
-        EthereumBlockHeaderAttestation ob = (EthereumBlockHeaderAttestation) o;
+    public int compareTo(TimeAttestation other) {
+        if (!(other instanceof EthereumBlockHeaderAttestation)) {
+            return this.getClass().getName().compareTo(other.getClass().getName());   // This makes the comparison symmetric
+        }
 
-        return this.height - ob.height;
+        EthereumBlockHeaderAttestation that = (EthereumBlockHeaderAttestation) other;
+
+        return this.height - that.height;
     }
 
     @Override

@@ -58,12 +58,16 @@ public abstract class OpBinary extends Op implements Comparable<Op> {
     }
 
     @Override
-    public int compareTo(Op o) {
-        if (o instanceof OpBinary && this._TAG() == o._TAG()) {
-            return Utils.compare(this.arg, ((OpBinary) o).arg);
+    public int compareTo(Op other) {
+        if (!(other instanceof OpBinary)) {
+            return this.getClass().getName().compareTo(other.getClass().getName());   // This makes the comparison symmetric
         }
 
-        return this._TAG() - o._TAG();
+        if (this._TAG() == other._TAG()) {
+            return Utils.compare(this.arg, ((OpBinary) other).arg);
+        }
+
+        return this._TAG() - other._TAG();
     }
 
     @Override

@@ -43,10 +43,14 @@ public class UnknownAttestation extends TimeAttestation {
     }
 
     @Override
-    public int compareTo(TimeAttestation o) {
-        UnknownAttestation ota = (UnknownAttestation) o;
+    public int compareTo(TimeAttestation other) {
+        if (!(other instanceof UnknownAttestation)) {
+            return this.getClass().getName().compareTo(other.getClass().getName());   // This makes the comparison symmetric
+        }
 
-        return Utils.compare(this.payload, ota.payload);
+        UnknownAttestation that = (UnknownAttestation) other;
+
+        return Utils.compare(this.payload, that.payload);
     }
 
     @Override

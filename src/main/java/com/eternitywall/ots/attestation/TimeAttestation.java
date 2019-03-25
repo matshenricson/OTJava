@@ -68,11 +68,11 @@ public abstract class TimeAttestation implements Comparable<TimeAttestation> {
     }
 
     @Override
-    public int compareTo(TimeAttestation o) {
-        int deltaTag = Utils.compare(this._TAG(), o._TAG());
+    public int compareTo(TimeAttestation other) {
+        int deltaTag = Utils.compare(this._TAG(), other._TAG());
 
         if (deltaTag == 0) {
-            return this.compareTo(o);
+            return this.compareTo(other);     // TODO: Wouldn't this be an infinite recursive call ???
         } else {
             return deltaTag;
         }

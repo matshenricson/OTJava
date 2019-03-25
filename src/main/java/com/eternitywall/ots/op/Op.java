@@ -132,7 +132,7 @@ public abstract class Op implements Comparable<Op> {
     }
 
     @Override
-    public int compareTo(Op o) {
-        return this._TAG() - o._TAG();
+    public int compareTo(Op other) {
+        return this._TAG() - other._TAG();
     }
 }
