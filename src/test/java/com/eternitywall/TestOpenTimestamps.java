@@ -14,13 +14,18 @@ import com.eternitywall.ots.attestation.TimeAttestation;
 import com.eternitywall.ots.exceptions.VerificationException;
 import com.eternitywall.ots.op.OpSHA256;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,22 +39,32 @@ import java.util.concurrent.Future;
 import static org.junit.Assert.*;
 
 public class TestOpenTimestamps {
-    private ExecutorService executor;
-    private byte[] incomplete;
-    private byte[] incompleteOts;
-    private String incompleteOtsInfo;
-    private byte[] helloWorld;
-    private byte[] helloWorldOts;
-    private byte[] merkle1Ots;
-    private byte[] merkle2Ots;
-    private String merkle2OtsInfo;
-    private byte[] merkle3Ots;
-    private byte[] differentBlockchainOts;
-    private String differentBlockchainOtsInfo;
 
-    @Before
-    public void loadData() throws ExecutionException, InterruptedException, IOException {
-        // TODO: Isn't it much better to have these test files in test/resources ???
+    private static final boolean LOCAL_TESTS = false;
+
+    private static ExecutorService executor;
+    private static byte[] incomplete;
+    private static byte[] incompleteOts;
+    private static String incompleteOtsInfo;
+    private static byte[] helloWorld;
+    private static byte[] helloWorldOts;
+    private static byte[] merkle1Ots;
+    private static byte[] merkle2Ots;
+    private static String merkle2OtsInfo;
+    private static byte[] merkle3Ots;
+    private static byte[] differentBlockchainOts;
+    private static String differentBlockchainOtsInfo;
+
+    @BeforeClass
+    public static void loadData() throws ExecutionException, InterruptedException, IOException {
+        if (LOCAL_TESTS) {
+            loadDataFromFiles();
+        } else {
+            loadDataFromGitHub();
+        }
+    }
+
+    private static void loadDataFromGitHub() throws ExecutionException, InterruptedException, IOException {
         final String baseUrl = "https://raw.githubusercontent.com/matshenricson/otjava/master";
 
         executor = Executors.newFixedThreadPool(4);
@@ -65,17 +80,43 @@ public class TestOpenTimestamps {
         Future<Response> differentBlockchainOtsFuture     = executor.submit(new Request(new URL(baseUrl + "/examples/different-blockchains.txt.ots")));
         Future<Response> differentBlockchainOtsInfoFuture = executor.submit(new Request(new URL(baseUrl + "/examples/different-blockchains.txt.ots.info")));
 
-        incompleteOts = incompleteOtsFuture.get().getBytes();
-        incomplete = incompleteFuture.get().getBytes();
-        incompleteOtsInfo = incompleteOtsInfoFuture.get().getString();
-        helloWorld = helloWorldFuture.get().getBytes();
-        helloWorldOts = helloWorldOtsFuture.get().getBytes();
-        merkle1Ots = merkle1OtsFuture.get().getBytes();
-        merkle2Ots = merkle2OtsFuture.get().getBytes();
-        merkle2OtsInfo = merkle2OtsInfoFuture.get().getString();
-        merkle3Ots = merkle3OtsFuture.get().getBytes();
-        differentBlockchainOts = differentBlockchainOtsFuture.get().getBytes();
+        incompleteOts              = incompleteOtsFuture.get().getBytes();
+        incomplete                 = incompleteFuture.get().getBytes();
+        incompleteOtsInfo          = incompleteOtsInfoFuture.get().getString();
+        helloWorld                 = helloWorldFuture.get().getBytes();
+        helloWorldOts              = helloWorldOtsFuture.get().getBytes();
+        merkle1Ots                 = merkle1OtsFuture.get().getBytes();
+        merkle2Ots                 = merkle2OtsFuture.get().getBytes();
+        merkle2OtsInfo             = merkle2OtsInfoFuture.get().getString();
+        merkle3Ots                 = merkle3OtsFuture.get().getBytes();
+        differentBlockchainOts     = differentBlockchainOtsFuture.get().getBytes();
         differentBlockchainOtsInfo = differentBlockchainOtsInfoFuture.get().getString();
+    }
+
+    private static void loadDataFromFiles() {
+        incompleteOts              = getByteArrayFromLocalFile("examples/incomplete.txt.ots");
+        incomplete                 = getByteArrayFromLocalFile("examples/incomplete.txt");
+        incompleteOtsInfo          = getStringFromLocalFile(   "examples/incomplete.txt.ots.info");
+        helloWorld                 = getByteArrayFromLocalFile("examples/hello-world.txt");
+        helloWorldOts              = getByteArrayFromLocalFile("examples/hello-world.txt.ots");
+        merkle1Ots                 = getByteArrayFromLocalFile("examples/merkle1.txt.ots");
+        merkle2Ots                 = getByteArrayFromLocalFile("examples/merkle2.txt.ots");
+        merkle2OtsInfo             = getStringFromLocalFile(   "examples/merkle2.txt.ots.info");
+        merkle3Ots                 = getByteArrayFromLocalFile("examples/merkle3.txt.ots");
+        differentBlockchainOts     = getByteArrayFromLocalFile("examples/different-blockchains.txt.ots");
+        differentBlockchainOtsInfo = getStringFromLocalFile(   "examples/different-blockchains.txt.ots.info");
+    }
+
+    private static byte[] getByteArrayFromLocalFile(String path) {
+        try {
+            return Files.readAllBytes(Paths.get(path));
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not load local file, really weird: " + e);
+        }
+    }
+
+    private static String getStringFromLocalFile(String path) {
+        return new String(getByteArrayFromLocalFile(path), StandardCharsets.UTF_8);
     }
 
     @Test
@@ -124,7 +165,7 @@ public class TestOpenTimestamps {
         files.add(incomplete);
         List<DetachedTimestampFile> fileTimestamps = new ArrayList<>();
 
-        for (byte[] file : files) {
+        for (byte[] file : files) {      // TODO: file is never used !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             InputStream is = new ByteArrayInputStream(helloWorld);
             DetachedTimestampFile detachedTimestampFile = DetachedTimestampFile.from(new OpSHA256(), is);
             fileTimestamps.add(detachedTimestampFile);
@@ -326,8 +367,10 @@ public class TestOpenTimestamps {
         }
     }
 
-    @After
-    public void tearDown() {
-        executor.shutdown();
+    @AfterClass
+    public static void tearDown() {
+        if (executor != null) {
+            executor.shutdown();
+        }
     }
 }

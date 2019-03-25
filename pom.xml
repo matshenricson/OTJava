@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.eternitywall</groupId>
-    <artifactId>java-opentimestamps</artifactId>
+    <artifactId>otjava</artifactId>
     <version>1.17</version>
 
-    <name>java-opentimestamps</name>
+    <name>otjava</name>
     <description>The java implementation of the OpenTimestamps protocol</description>
-    <url>https://github.com/eternitywall/java-opentimestamps</url>
+    <url>https://github.com/matshenricson/otjava</url>
     <licenses>
         <license>
             <name>GNU Lesser General Public License v3.0</name>
@@ -18,6 +18,12 @@
         </license>
     </licenses>
     <developers>
+        <developer>
+            <name>Mats Henricson</name>
+            <email>mats.henricson@gmail.com</email>
+            <organization>Westward Consulting AB</organization>
+            <organizationUrl>https://www.txyzr.com</organizationUrl>
+        </developer>
         <developer>
             <name>Riccardo Casatta</name>
             <email>riccardo@eternitywall.com</email>
@@ -32,11 +38,10 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:git://github.com/eternitywall/java-opentimestamps.git</connection>
-        <developerConnection>scm:git:ssh://github.com/eternitywall/java-opentimestamps.git</developerConnection>
-        <url>http://github.com/eternitywall/java-opentimestamps/tree/master</url>
+        <connection>scm:git:git://github.com/matshenricson/otjava.git</connection>
+        <developerConnection>scm:git:ssh://github.com/matshenricson/otjava.git</developerConnection>
+        <url>http://github.com/matshenricson/otjava/tree/master</url>
     </scm>
-
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
