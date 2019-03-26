@@ -487,7 +487,7 @@ public class OpenTimestamps {
 
                         upgraded = true;
                     } catch (Exception e) {
-                        log.severe("Could not upgrade an incomplete timestamp to make it verifiable: " + e.toString());
+                        log.info("Could not upgrade an incomplete timestamp to make it verifiable: " + e.toString());
                     }
                 }
             }

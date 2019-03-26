@@ -1,7 +1,5 @@
 package com.eternitywall;
 
-import com.eternitywall.http.Request;
-import com.eternitywall.http.Response;
 import com.eternitywall.ots.DetachedTimestampFile;
 import com.eternitywall.ots.Hash;
 import com.eternitywall.ots.OpenTimestamps;
@@ -13,16 +11,11 @@ import com.eternitywall.ots.VerifyResult;
 import com.eternitywall.ots.attestation.TimeAttestation;
 import com.eternitywall.ots.exceptions.VerificationException;
 import com.eternitywall.ots.op.OpSHA256;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -31,81 +24,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import static org.junit.Assert.*;
 
 public class TestOpenTimestamps {
 
-    private static final boolean LOCAL_TESTS = false;
-
-    private static ExecutorService executor;
-    private static byte[] incomplete;
-    private static byte[] incompleteOts;
-    private static String incompleteOtsInfo;
-    private static byte[] helloWorld;
-    private static byte[] helloWorldOts;
-    private static byte[] merkle1Ots;
-    private static byte[] merkle2Ots;
-    private static String merkle2OtsInfo;
-    private static byte[] merkle3Ots;
-    private static byte[] differentBlockchainOts;
-    private static String differentBlockchainOtsInfo;
-
-    @BeforeClass
-    public static void loadData() throws ExecutionException, InterruptedException, IOException {
-        if (LOCAL_TESTS) {
-            loadDataFromFiles();
-        } else {
-            loadDataFromGitHub();
-        }
-    }
-
-    private static void loadDataFromGitHub() throws ExecutionException, InterruptedException, IOException {
-        final String baseUrl = "https://raw.githubusercontent.com/matshenricson/otjava/master";
-
-        executor = Executors.newFixedThreadPool(4);
-        Future<Response> incompleteFuture                 = executor.submit(new Request(new URL(baseUrl + "/examples/incomplete.txt")));
-        Future<Response> incompleteOtsFuture              = executor.submit(new Request(new URL(baseUrl + "/examples/incomplete.txt.ots")));
-        Future<Response> incompleteOtsInfoFuture          = executor.submit(new Request(new URL(baseUrl + "/examples/incomplete.txt.ots.info")));
-        Future<Response> helloWorldFuture                 = executor.submit(new Request(new URL(baseUrl + "/examples/hello-world.txt")));
-        Future<Response> helloWorldOtsFuture              = executor.submit(new Request(new URL(baseUrl + "/examples/hello-world.txt.ots")));
-        Future<Response> merkle1OtsFuture                 = executor.submit(new Request(new URL(baseUrl + "/examples/merkle1.txt.ots")));
-        Future<Response> merkle2OtsFuture                 = executor.submit(new Request(new URL(baseUrl + "/examples/merkle2.txt.ots")));
-        Future<Response> merkle2OtsInfoFuture             = executor.submit(new Request(new URL(baseUrl + "/examples/merkle2.txt.ots.info")));
-        Future<Response> merkle3OtsFuture                 = executor.submit(new Request(new URL(baseUrl + "/examples/merkle3.txt.ots")));
-        Future<Response> differentBlockchainOtsFuture     = executor.submit(new Request(new URL(baseUrl + "/examples/different-blockchains.txt.ots")));
-        Future<Response> differentBlockchainOtsInfoFuture = executor.submit(new Request(new URL(baseUrl + "/examples/different-blockchains.txt.ots.info")));
-
-        incompleteOts              = incompleteOtsFuture.get().getBytes();
-        incomplete                 = incompleteFuture.get().getBytes();
-        incompleteOtsInfo          = incompleteOtsInfoFuture.get().getString();
-        helloWorld                 = helloWorldFuture.get().getBytes();
-        helloWorldOts              = helloWorldOtsFuture.get().getBytes();
-        merkle1Ots                 = merkle1OtsFuture.get().getBytes();
-        merkle2Ots                 = merkle2OtsFuture.get().getBytes();
-        merkle2OtsInfo             = merkle2OtsInfoFuture.get().getString();
-        merkle3Ots                 = merkle3OtsFuture.get().getBytes();
-        differentBlockchainOts     = differentBlockchainOtsFuture.get().getBytes();
-        differentBlockchainOtsInfo = differentBlockchainOtsInfoFuture.get().getString();
-    }
-
-    private static void loadDataFromFiles() {
-        incompleteOts              = getByteArrayFromLocalFile("examples/incomplete.txt.ots");
-        incomplete                 = getByteArrayFromLocalFile("examples/incomplete.txt");
-        incompleteOtsInfo          = getStringFromLocalFile(   "examples/incomplete.txt.ots.info");
-        helloWorld                 = getByteArrayFromLocalFile("examples/hello-world.txt");
-        helloWorldOts              = getByteArrayFromLocalFile("examples/hello-world.txt.ots");
-        merkle1Ots                 = getByteArrayFromLocalFile("examples/merkle1.txt.ots");
-        merkle2Ots                 = getByteArrayFromLocalFile("examples/merkle2.txt.ots");
-        merkle2OtsInfo             = getStringFromLocalFile(   "examples/merkle2.txt.ots.info");
-        merkle3Ots                 = getByteArrayFromLocalFile("examples/merkle3.txt.ots");
-        differentBlockchainOts     = getByteArrayFromLocalFile("examples/different-blockchains.txt.ots");
-        differentBlockchainOtsInfo = getStringFromLocalFile(   "examples/different-blockchains.txt.ots.info");
-    }
+    private static final byte[] incomplete                 = getByteArrayFromLocalFile("examples/incomplete.txt");
+    private static final byte[] incompleteOts              = getByteArrayFromLocalFile("examples/incomplete.txt.ots");
+    private static final String incompleteOtsInfo          = getStringFromLocalFile(   "examples/incomplete.txt.ots.info");
+    private static final byte[] helloWorld                 = getByteArrayFromLocalFile("examples/hello-world.txt");
+    private static final byte[] helloWorldOts              = getByteArrayFromLocalFile("examples/hello-world.txt.ots");
+    private static final byte[] merkle1Ots                 = getByteArrayFromLocalFile("examples/merkle1.txt.ots");
+    private static final byte[] merkle2Ots                 = getByteArrayFromLocalFile("examples/merkle2.txt.ots");
+    private static final String merkle2OtsInfo             = getStringFromLocalFile(   "examples/merkle2.txt.ots.info");
+    private static final byte[] merkle3Ots                 = getByteArrayFromLocalFile("examples/merkle3.txt.ots");
+    private static final byte[] differentBlockchainOts     = getByteArrayFromLocalFile("examples/different-blockchains.txt.ots");
+    private static final String differentBlockchainOtsInfo = getStringFromLocalFile(   "examples/different-blockchains.txt.ots.info");
 
     private static byte[] getByteArrayFromLocalFile(String path) {
         try {
@@ -364,13 +298,6 @@ public class TestOpenTimestamps {
             TimeAttestation resultAttestationBitcoin = timestamp.shrink();
             assertEquals(2, timestamp.allAttestations().size());
             assertTrue(timestamp.getAttestations().contains(resultAttestationBitcoin));
-        }
-    }
-
-    @AfterClass
-    public static void tearDown() {
-        if (executor != null) {
-            executor.shutdown();
         }
     }
 }
