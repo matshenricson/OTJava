@@ -99,8 +99,8 @@ public class TestOpenTimestamps {
         files.add(incomplete);
         List<DetachedTimestampFile> fileTimestamps = new ArrayList<>();
 
-        for (byte[] file : files) {      // TODO: file is never used !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            InputStream is = new ByteArrayInputStream(helloWorld);
+        for (byte[] file : files) {
+            InputStream is = new ByteArrayInputStream(file);
             DetachedTimestampFile detachedTimestampFile = DetachedTimestampFile.from(new OpSHA256(), is);
             fileTimestamps.add(detachedTimestampFile);
         }
