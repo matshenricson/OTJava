@@ -7,9 +7,11 @@
 
 [![Build Status](https://travis-ci.org/opentimestamps/java-opentimestamps.svg?branch=master)](https://travis-ci.org/opentimestamps/java-opentimestamps)
 
-This repo host the Java implementation of OpenTimestamps.
+This repo is a fork (!) of the Java implementation of OpenTimestamps, https://github.com/opentimestamps/java-opentimestamps
+implementation, which in turn is based on the python implementation at
+https://github.com/opentimestamps/python-opentimestamps and https://github.com/opentimestamps/opentimestamps-client
 
-It is a based on the python implementation at https://github.com/opentimestamps/python-opentimestamps and https://github.com/opentimestamps/opentimestamps-client
+It is still completely compatible with the original code, but that may soon change.
 
 ## Compatibility
 
@@ -19,8 +21,8 @@ Java 1.7+
 
 ```xml
 <dependency>
-    <groupId>com.eternitywall</groupId>
-    <artifactId>java-opentimestamps</artifactId>
+    <groupId>com.eternitywall</groupId>    <!-- TODO: FIXME -->
+    <artifactId>otjava</artifactId>
     <version>1.17</version>
 </dependency>
 ```
@@ -28,8 +30,8 @@ Java 1.7+
 ## Installation
 
 ```
-git clone https://github.com/opentimestamps/java-opentimestamps
-cd java-opentimestamps
+git clone https://github.com/matshenricson/otjava
+cd otjava
 mvn install
 ```
 
@@ -171,11 +173,9 @@ if(!changed) {
 ## Testing
 
 ```
-cd java-opentimestamps
+cd otjava
 mvn test
 ```
-
-
 
 ## License
 
