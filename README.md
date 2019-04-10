@@ -7,11 +7,29 @@
 
 [![Build Status](https://travis-ci.org/opentimestamps/java-opentimestamps.svg?branch=master)](https://travis-ci.org/opentimestamps/java-opentimestamps)
 
-This repo is a fork (!) of the Java implementation of OpenTimestamps, https://github.com/opentimestamps/java-opentimestamps
-implementation, which in turn is based on the python implementation at
-https://github.com/opentimestamps/python-opentimestamps and https://github.com/opentimestamps/opentimestamps-client
+This repo is a fork (!) of the Java implementation of OpenTimestamps
+
+* https://github.com/opentimestamps/java-opentimestamps
+
+which in turn is based on the python implementations
+
+* https://github.com/opentimestamps/python-opentimestamps
+* https://github.com/opentimestamps/opentimestamps-client
 
 It is still completely compatible with the original code, but that may soon change.
+
+## Authors
+
+The original Java code was written mainly by:
+
+* https://github.com/RCasatta
+* https://github.com/lvaccaro
+
+They have nothing to do with this fork, which is written by:
+
+* https://github.com/matshenricson
+
+I work alone, directly on master/trunk, and my philosophy is to depend on extensive unit and system tests, and work fast.
 
 ## Compatibility
 
