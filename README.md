@@ -1,4 +1,4 @@
-# java-opentimestamps
+# otjava
 
 [![OpenTimestamps logo][2]][1]
 
