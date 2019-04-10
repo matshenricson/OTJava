@@ -5,7 +5,7 @@
 [1]: https://opentimestamps.org
 [2]: https://raw.githubusercontent.com/opentimestamps/logo/master/white-bg/website-horizontal-350x75.png (OpenTimestamps logo)
 
-[![Build Status](https://travis-ci.org/opentimestamps/java-opentimestamps.svg?branch=master)](https://travis-ci.org/opentimestamps/java-opentimestamps)
+[![Build Status](https://travis-ci.org/matshenricson/otjava.svg?branch=master)](https://travis-ci.org/matshenricson/otjava)
 
 This repo is a fork (!) of the Java implementation of OpenTimestamps
 
