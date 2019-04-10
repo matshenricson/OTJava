@@ -178,10 +178,6 @@ public class OpenTimestamps {
         // Stamping
         Timestamp resultTimestamp = OpenTimestamps.create(merkleTip, calendarsUrl, m, privateCalendarsUrl);
 
-        if (resultTimestamp == null) {    // TODO: I don't think this is possible...
-            throw new IOException();
-        }
-
         // Result of timestamp serialization
         if (fileTimestamps.size() == 1) {
             return fileTimestamps.get(0).timestamp;
