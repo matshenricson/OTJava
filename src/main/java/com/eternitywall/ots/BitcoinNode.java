@@ -118,10 +118,6 @@ public class BitcoinNode {
         json.put("params", array);
         JSONObject jsonObject = callRPC(json);
 
-        if (jsonObject == null) {
-            return null;
-        }
-
         return jsonObject.getString("result");
     }
 
