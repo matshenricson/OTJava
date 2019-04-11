@@ -37,10 +37,6 @@ public class OpCrypto extends OpUnary {
         super();
     }
 
-    public static Op deserializeFromTag(StreamDeserializationContext ctx, byte tag) {
-        return OpUnary.deserializeFromTag(ctx, tag);
-    }
-
     @Override
     public byte[] call(byte[] msg) {
         // For Sha1 & Sha256 use java.security.MessageDigest library

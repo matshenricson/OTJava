@@ -64,7 +64,7 @@ public abstract class Op implements Comparable<Op> {
     public static Op deserialize(StreamDeserializationContext ctx) {
         byte tag = ctx.readBytes(1)[0];
 
-        return Op.deserializeFromTag(ctx, tag);
+        return deserializeFromTag(ctx, tag);
     }
 
     /**
@@ -76,17 +76,17 @@ public abstract class Op implements Comparable<Op> {
      */
     public static Op deserializeFromTag(StreamDeserializationContext ctx, byte tag) {
         if (tag == OpAppend._TAG) {
-            return OpAppend.deserializeFromTag(ctx, tag);
+            return OpBinary.deserializeFromTag(ctx, tag);
         } else if (tag == OpPrepend._TAG) {
-            return OpPrepend.deserializeFromTag(ctx, tag);
+            return OpBinary.deserializeFromTag(ctx, tag);
         } else if (tag == OpSHA1._TAG) {
-            return OpSHA1.deserializeFromTag(ctx, tag);
+            return OpUnary.deserializeFromTag(ctx, tag);
         } else if (tag == OpSHA256._TAG) {
-            return OpSHA256.deserializeFromTag(ctx, tag);
+            return OpUnary.deserializeFromTag(ctx, tag);
         } else if (tag == OpRIPEMD160._TAG) {
-            return OpRIPEMD160.deserializeFromTag(ctx, tag);
+            return OpUnary.deserializeFromTag(ctx, tag);
         } else if (tag == OpKECCAK256._TAG) {
-            return OpKECCAK256.deserializeFromTag(ctx, tag);
+            return OpUnary.deserializeFromTag(ctx, tag);
         } else {
             log.severe("Unknown operation tag: " + tag + " 0x" + String.format("%02x", tag));
             return null;     // TODO: Is this OK? Won't it blow up later? Better to throw?

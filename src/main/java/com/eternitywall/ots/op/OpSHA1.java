@@ -1,7 +1,5 @@
 package com.eternitywall.ots.op;
 
-import com.eternitywall.ots.StreamDeserializationContext;
-
 /**
  * Cryptographic SHA1 operation.
  * Cryptographic operation tag numbers taken from RFC4880, although it's not
@@ -46,10 +44,6 @@ public class OpSHA1 extends OpCrypto {
     @Override
     public byte[] call(byte[] msg) {
         return super.call(msg);
-    }
-
-    public static Op deserializeFromTag(StreamDeserializationContext ctx, byte tag) {
-        return OpCrypto.deserializeFromTag(ctx, tag);
     }
 
     @Override

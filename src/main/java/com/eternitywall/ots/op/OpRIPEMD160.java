@@ -1,6 +1,5 @@
 package com.eternitywall.ots.op;
 
-import com.eternitywall.ots.StreamDeserializationContext;
 import com.eternitywall.ots.crypto.RIPEMD160Digest;
 
 /**
@@ -46,10 +45,6 @@ public class OpRIPEMD160 extends OpCrypto {
         digest.doFinal(hash, 0);
 
         return hash;
-    }
-
-    public static Op deserializeFromTag(StreamDeserializationContext ctx, byte tag) {
-        return OpCrypto.deserializeFromTag(ctx, tag);
     }
 
     @Override
