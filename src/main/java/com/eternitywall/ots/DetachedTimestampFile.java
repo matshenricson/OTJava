@@ -100,7 +100,7 @@ public class DetachedTimestampFile {
         ctx.assertMagic(HEADER_MAGIC);
         ctx.readVaruint();
 
-        OpCrypto fileHashOp = (OpCrypto) OpCrypto.deserialize(ctx);
+        OpCrypto fileHashOp = (OpCrypto) OpCrypto.deserialize(ctx);    // TODO: If deserialize() returns a binary op, we'd get a ClassCastException!
         byte[] fileHash = ctx.readBytes(fileHashOp._DIGEST_LENGTH());
         Timestamp timestamp = Timestamp.deserialize(ctx, fileHash);
 
