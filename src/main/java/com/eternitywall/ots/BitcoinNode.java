@@ -28,9 +28,6 @@ public class BitcoinNode {
     private static String RPCPORT = "rpcport";
     private static String RPCPASSWORD = "rpcpassword";
 
-    private BitcoinNode() {
-    }
-
     public BitcoinNode(Properties bitcoinConf) {
         authString = String.valueOf(Base64Coder.encode(String.format("%s:%s", bitcoinConf.getProperty(RPCUSER), bitcoinConf.getProperty(RPCPASSWORD)).getBytes()));
         urlString = String.format("http://%s:%s", bitcoinConf.getProperty(RPCCONNECT), bitcoinConf.getProperty(RPCPORT));
@@ -38,14 +35,14 @@ public class BitcoinNode {
 
     public static Properties readBitcoinConf() throws Exception {
         String home = System.getProperty("user.home");
-        List<String> list = Arrays.asList("/.bitcoin/bitcoin.conf", "\\AppData\\Roaming\\Bitcoin\\bitcoin.conf", "/Library/Application Support/Bitcoin/bitcoin.conf");
+        List<String> dirs = Arrays.asList("/.bitcoin/", "\\AppData\\Roaming\\Bitcoin\\", "/Library/Application Support/Bitcoin/");
 
-        for (String dir : list) {
+        for (String dir : dirs) {
             Properties prop = new Properties();
             InputStream input = null;
 
             try {
-                input = new FileInputStream(home + dir);
+                input = new FileInputStream(home + dir + "bitcoin.conf");
 
                 prop.load(input);
 
@@ -68,13 +65,13 @@ public class BitcoinNode {
                     try {
                         input.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        // Could not close input stream. Ignore issue.
                     }
                 }
             }
         }
 
-        throw new Exception("No bitcoin.conf file found in any of these paths: " + Arrays.toString(list.toArray()));
+        throw new Exception("No bitcoin.conf file found in any of these paths: " + Arrays.toString(dirs.toArray()));
     }
 
     public JSONObject getBlockChainInfo() throws Exception {
