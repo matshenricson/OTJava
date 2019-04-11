@@ -115,21 +115,7 @@ public abstract class Op implements Comparable<Op> {
      * @param msg The message.
      * @return the msg after the operation has been applied
      */
-    public byte[] call(byte[] msg) {
-        if (msg.length > _MAX_MSG_LENGTH) {
-            log.severe("Error : Message too long;");
-            return new byte[]{};     // TODO: Is this OK? Won't it blow up later? Better to throw?
-        }
-
-        byte[] r = this.call(msg);
-
-        if (r.length > _MAX_RESULT_LENGTH) {
-            log.severe("Error : Result too long;");
-            // TODO: Is it OK to just log and carry on? Won't it blow up later? Better to throw?
-        }
-
-        return r;
-    }
+    public abstract byte[] call(byte[] msg);
 
     @Override
     public int compareTo(Op other) {
