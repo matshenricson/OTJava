@@ -1,6 +1,5 @@
 package com.eternitywall.ots.op;
 
-import com.eternitywall.ots.StreamDeserializationContext;
 import com.eternitywall.ots.Utils;
 
 import java.util.Arrays;
@@ -14,8 +13,6 @@ public class OpPrepend extends OpBinary {
 
     public static final byte _TAG = (byte) 0xf1;
 
-    byte[] arg;
-
     @Override
     public byte _TAG() {
         return OpPrepend._TAG;
@@ -28,21 +25,15 @@ public class OpPrepend extends OpBinary {
 
     public OpPrepend() {
         super();
-        this.arg = new byte[]{};
     }
 
     public OpPrepend(byte[] arg) {
         super(arg);
-        this.arg = arg;
     }
 
     @Override
     public byte[] call(byte[] msg) {
         return Utils.arraysConcat(this.arg, msg);
-    }
-
-    public static Op deserializeFromTag(StreamDeserializationContext ctx, byte tag) {
-        return OpBinary.deserializeFromTag(ctx, tag);
     }
 
     @Override
@@ -52,10 +43,5 @@ public class OpPrepend extends OpBinary {
         }
 
         return Arrays.equals(this.arg, ((OpPrepend) other).arg);
-    }
-
-    @Override
-    public int hashCode() {
-        return _TAG ^ Arrays.hashCode(this.arg);
     }
 }

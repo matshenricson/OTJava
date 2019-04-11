@@ -18,11 +18,6 @@ public abstract class OpBinary extends Op implements Comparable<Op> {
 
     public byte[] arg;
 
-    @Override
-    public String _TAG_NAME() {
-        return "";
-    }
-
     public OpBinary() {
         super();
         this.arg = new byte[]{};
@@ -72,6 +67,6 @@ public abstract class OpBinary extends Op implements Comparable<Op> {
 
     @Override
     public int hashCode() {
-        return _TAG ^ Arrays.hashCode(this.arg);
+        return this._TAG() ^ Arrays.hashCode(this.arg);
     }
 }
