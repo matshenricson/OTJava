@@ -2,19 +2,15 @@ package com.eternitywall;
 
 import com.eternitywall.ots.BitcoinNode;
 import com.eternitywall.ots.BlockHeader;
-import com.eternitywall.ots.Utils;
 import org.json.JSONObject;
 import org.junit.Test;
 
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class TestBitcoin {
-
-    private static Logger log = Utils.getLogger(TestBitcoin.class.getName());
 
     @Test
     public void testBitcoin() {
@@ -33,10 +29,9 @@ public class TestBitcoin {
             BlockHeader blockHeader = bitcoin.getBlockHeader(s);
             assertEquals("4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b", blockHeader.getMerkleroot());
 
-            log.info(blockHeader.toString());
             assertEquals("1231006505", String.valueOf(blockHeader.getTime()));
         } catch (Exception e) {
-            log.info("no bitcoin node");
+            System.out.println("No available Bitcoin node, not exactly an error");
         }
     }
 }
