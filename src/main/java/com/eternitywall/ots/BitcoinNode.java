@@ -77,10 +77,9 @@ public class BitcoinNode {
         throw new Exception();    // TODO: Add this message: "No bitcoin.conf file found in any of these paths: " + list
     }
 
-    public JSONObject getInfo() throws Exception {
+    public JSONObject getBlockChainInfo() throws Exception {
         JSONObject json = new JSONObject();
-        json.put("id", "java");
-        json.put("method", "getinfo");
+        json.put("method", "getblockchaininfo");
 
         return callRPC(json);
     }

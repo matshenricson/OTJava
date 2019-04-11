@@ -21,7 +21,7 @@ public class TestBitcoin {
         try {
             Properties properties = BitcoinNode.readBitcoinConf();
             BitcoinNode bitcoin = new BitcoinNode(properties);
-            String info = bitcoin.getInfo().toString();
+            String info = bitcoin.getBlockChainInfo().toString();
             assertNotNull(info);
 
             JSONObject jsonObject = new JSONObject(info);
