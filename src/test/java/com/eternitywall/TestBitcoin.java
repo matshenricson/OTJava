@@ -31,7 +31,7 @@ public class TestBitcoin {
 
             assertEquals("1231006505", String.valueOf(blockHeader.getTime()));
         } catch (Exception e) {
-            System.out.println("No available Bitcoin node, not exactly an error");
+            System.out.println("Could not connect to Bitcoin node. Reason: " + e);
         }
     }
 }
