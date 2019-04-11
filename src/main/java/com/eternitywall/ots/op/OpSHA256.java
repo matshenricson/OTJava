@@ -36,11 +36,6 @@ public class OpSHA256 extends OpCrypto {
     }
 
     @Override
-    public byte[] call(byte[] msg) {
-        return super.call(msg);
-    }
-
-    @Override
     public int hashCode() {
         return _TAG;
     }
