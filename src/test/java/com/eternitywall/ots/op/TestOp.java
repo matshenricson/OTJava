@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import javax.xml.bind.DatatypeConverter;
 
+import java.nio.charset.StandardCharsets;
+
 import static org.bitcoinj.core.Utils.toBytes;
 import static org.junit.Assert.*;
 
@@ -22,11 +24,19 @@ public class TestOp {
     }
 
     @Test
-    public void testSha256Operation() {
+    public void testSha256OperationEmptyBytes() {
         OpSHA256 opSHA256 = new OpSHA256();
         byte[] emptyMsg = {};
         assertArrayEquals(DatatypeConverter.parseHexBinary("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
                           opSHA256.call(emptyMsg));
+    }
+
+    @Test
+    public void testSha256OperationNotEmptyBytes() {
+        OpSHA256 opSHA256 = new OpSHA256();
+        byte[] abc123Bytes = "abc123".getBytes(StandardCharsets.UTF_8);
+        assertArrayEquals(DatatypeConverter.parseHexBinary("6ca13d52ca70c883e0f0bb101e425a89e8624de51db2d2392593af6a84118090"),
+                          opSHA256.call(abc123Bytes));
     }
 
     @Test
