@@ -44,6 +44,26 @@ public class TestOp {
         assertNotEquals(new OpAppend(toBytes("foo", "UTF-8")), new OpAppend(toBytes("bar", "UTF-8")));
         assertNotEquals(new OpAppend(toBytes("foo", "UTF-8")), new OpPrepend(toBytes("foo", "UTF-8")));
         assertNotEquals(new OpPrepend(toBytes("foo", "UTF-8")), new OpAppend(toBytes("foo", "UTF-8")));
+
+        assertEquals(new OpSHA1(), new OpSHA1());
+        assertNotEquals(new OpSHA1(), new OpSHA256());
+        assertNotEquals(new OpSHA1(), new OpRIPEMD160());
+        assertNotEquals(new OpSHA1(), new OpKECCAK256());
+
+        assertEquals(new OpSHA256(), new OpSHA256());
+        assertNotEquals(new OpSHA256(), new OpSHA1());
+        assertNotEquals(new OpSHA256(), new OpRIPEMD160());
+        assertNotEquals(new OpSHA256(), new OpKECCAK256());
+
+        assertEquals(new OpRIPEMD160(), new OpRIPEMD160());
+        assertNotEquals(new OpRIPEMD160(), new OpSHA256());
+        assertNotEquals(new OpRIPEMD160(), new OpSHA1());
+        assertNotEquals(new OpRIPEMD160(), new OpKECCAK256());
+
+        assertEquals(new OpKECCAK256(), new OpKECCAK256());
+        assertNotEquals(new OpKECCAK256(), new OpSHA256());
+        assertNotEquals(new OpKECCAK256(), new OpRIPEMD160());
+        assertNotEquals(new OpKECCAK256(), new OpSHA1());
     }
 
     @Test
@@ -59,5 +79,10 @@ public class TestOp {
         OpAppend op4 = new OpAppend(toBytes("01", "UTF-8"));
         assertTrue(op3.compareTo(op4) < 0);
         assertFalse(op3.compareTo(op4) > 0);
+
+        OpAppend op5 = new OpAppend(toBytes("01", "UTF-8"));
+        OpAppend op6 = new OpAppend(toBytes("00", "UTF-8"));
+        assertFalse(op5.compareTo(op6) < 0);
+        assertTrue(op5.compareTo(op6) > 0);
     }
 }

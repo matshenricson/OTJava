@@ -47,11 +47,6 @@ public class OpSHA1 extends OpCrypto {
     }
 
     @Override
-    public boolean equals(Object other) {
-        return (other instanceof OpSHA1);
-    }
-
-    @Override
     public int hashCode() {
         return _TAG;
     }

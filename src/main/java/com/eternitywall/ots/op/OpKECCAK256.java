@@ -47,9 +47,4 @@ public class OpKECCAK256 extends OpCrypto {
 
         return hash;
     }
-
-    @Override
-    public boolean equals(Object other) {
-        return (other instanceof OpKECCAK256);
-    }
 }

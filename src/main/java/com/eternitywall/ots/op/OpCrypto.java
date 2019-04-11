@@ -87,4 +87,9 @@ public class OpCrypto extends OpUnary {
 
         return digest.digest();   // The hash
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return this.getClass().getName().equals(other.getClass().getName());  // Equal only if they're of the same class
+    }
 }

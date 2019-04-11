@@ -48,11 +48,6 @@ public class OpRIPEMD160 extends OpCrypto {
     }
 
     @Override
-    public boolean equals(Object other) {
-        return (other instanceof OpRIPEMD160);
-    }
-
-    @Override
     public int hashCode() {
         return _TAG;
     }
