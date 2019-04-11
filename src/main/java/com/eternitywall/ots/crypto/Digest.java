@@ -9,21 +9,21 @@ public interface Digest {
      *
      * @return the algorithm name
      */
-    public String getAlgorithmName();
+    String getAlgorithmName();
 
     /**
      * Return the size, in bytes, of the digest produced by this message digest.
      *
      * @return the size, in bytes, of the digest produced by this message digest.
      */
-    public int getDigestSize();
+    int getDigestSize();
 
     /**
      * Update the message digest with a single byte.
      *
      * @param in the input byte to be entered.
      */
-    public void update(byte in);
+    void update(byte in);
 
     /**
      * Update the message digest with a block of bytes.
@@ -32,7 +32,7 @@ public interface Digest {
      * @param inOff the offset into the byte array where the data starts.
      * @param len   the length of the data.
      */
-    public void update(byte[] in, int inOff, int len);
+    void update(byte[] in, int inOff, int len);
 
     /**
      * Close the digest, producing the final digest value.
@@ -43,10 +43,10 @@ public interface Digest {
      * @return       the length of the digest
      * @see #reset()
      */
-    public int doFinal(byte[] out, int outOff);
+    int doFinal(byte[] out, int outOff);
 
     /**
      * Reset the digest back to it's initial state.
      */
-    public void reset();
+    void reset();
 }

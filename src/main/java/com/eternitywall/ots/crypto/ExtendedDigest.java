@@ -6,5 +6,5 @@ public interface ExtendedDigest extends Digest {
      *
      * @return byte length of the digests internal buffer.
      */
-    public int getByteLength();
+    int getByteLength();
 }
