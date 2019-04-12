@@ -1,21 +1,18 @@
-package com.eternitywall;
+package com.eternitywall.ots;
 
-import com.eternitywall.ots.Calendar;
-import com.eternitywall.ots.CalendarAsyncSubmit;
-import com.eternitywall.ots.Optional;
-import com.eternitywall.ots.Timestamp;
-import com.eternitywall.ots.Utils;
 import org.bitcoinj.core.DumpedPrivateKey;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.junit.Test;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,34 +34,16 @@ public class TestCalendar {
         Calendar calendar = new Calendar(calendarUrl);
         Timestamp timestamp = calendar.submit(digest);
         assertNotNull(timestamp);
-        assertArrayEquals(timestamp.getDigest(), digest);
+        assertArrayEquals(digest, timestamp.getDigest());
     }
 
     @Test
     public void testPrivate() throws Exception {
-        byte[] digest = Utils.randBytes(32);
-
         // key.wif it's a file of properties with the format
         // <calendar url> = <private key in wif format>
         // auth.calendar.eternitywall.com = KwT2r9sL........
-
-        Path path = Paths.get("key.wif");
-
-        if (!Files.exists(path)) {
-            // No need to carry on this test
-            return;
-        }
-
-        Properties properties = new Properties();
-        properties.load(new FileInputStream("key.wif"));
-        HashMap<String, String> privateUrls = new HashMap<>();
-
-        for (String key : properties.stringPropertyNames()) {
-            String value = properties.getProperty(key);
-            privateUrls.put(key, value);
-        }
-
-        assertFalse(privateUrls.isEmpty());
+        Map<String, String> privateUrls = getPrivateUrlsMap("key.wif");
+        byte[] digest = Utils.randBytes(32);
 
         for (Map.Entry<String, String> entry : privateUrls.entrySet()) {
             String calendarUrl = "https://" + entry.getKey();
@@ -84,30 +63,17 @@ public class TestCalendar {
             calendar.setKey(key);
             Timestamp timestamp = calendar.submit(digest);
             assertNotNull(timestamp);
-            assertArrayEquals(timestamp.getDigest(), digest);
+            assertArrayEquals(digest, timestamp.getDigest());
         }
     }
 
     @Test
     public void testPrivateWif() throws Exception {
+        // key.wif it's a file of properties with the format
+        // <calendar url> = <private key in wif format>
+        // auth.calendar.eternitywall.com = KwT2r9sL........
+        Map<String, String> privateUrls = getPrivateUrlsMap("key.wif");
         byte[] digest = Utils.randBytes(32);
-        Path path = Paths.get("key.wif");
-
-        if (!Files.exists(path)) {
-            assertTrue(true);
-            return;
-        }
-
-        Properties properties = new Properties();
-        properties.load(new FileInputStream("key.wif"));
-        HashMap<String, String> privateUrls = new HashMap<>();
-
-        for (String key : properties.stringPropertyNames()) {
-            String value = properties.getProperty(key);
-            privateUrls.put(key, value);
-        }
-
-        assertFalse(privateUrls.isEmpty());
 
         for (Map.Entry<String, String> entry : privateUrls.entrySet()) {
             String calendarUrl = "https://" + entry.getKey();
@@ -122,6 +88,28 @@ public class TestCalendar {
             assertNotNull(timestamp);
             assertArrayEquals(timestamp.getDigest(), digest);
         }
+    }
+
+    private Map<String, String> getPrivateUrlsMap(String fileName) throws IOException {
+        Path path = Paths.get(fileName);
+
+        if (!Files.exists(path)) {
+            return Collections.emptyMap();    // This will make the resulting test a NOP
+        }
+
+        Properties properties = new Properties();
+        properties.load(new FileInputStream(path.toString()));
+
+        HashMap<String, String> privateUrls = new HashMap<>();
+
+        for (String key : properties.stringPropertyNames()) {
+            String value = properties.getProperty(key);
+            privateUrls.put(key, value);
+        }
+
+        assertFalse(privateUrls.isEmpty());   // If the properties file exist, then it shall not be empty
+
+        return privateUrls;
     }
 
     @Test
@@ -142,24 +130,8 @@ public class TestCalendar {
     @Test
     public void testSingleAsyncPrivate() throws Exception {
         ArrayBlockingQueue<Optional<Timestamp>> queue = new ArrayBlockingQueue<>(1);
+        Map<String, String> privateUrls = getPrivateUrlsMap("signature.key");
         byte[] digest = Utils.randBytes(32);
-        Path path = Paths.get("signature.key");
-
-        if (!Files.exists(path)) {
-            assertTrue(true);
-            return;
-        }
-
-        Properties properties = new Properties();
-        properties.load(new FileInputStream("signature.key"));
-        HashMap<String, String> privateUrls = new HashMap<>();
-
-        for (String key : properties.stringPropertyNames()) {
-            String value = properties.getProperty(key);
-            privateUrls.put(key, value);
-        }
-
-        assertFalse(privateUrls.isEmpty());
 
         for (Map.Entry<String, String> entry : privateUrls.entrySet()) {
             String calendarUrl = "https://" + entry.getKey();
