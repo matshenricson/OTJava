@@ -10,7 +10,6 @@ import org.bitcoinj.core.ECKey;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Class representing remote calendar server interface.
@@ -19,8 +18,6 @@ public class Calendar {
 
     private String url;
     private ECKey key;
-
-    private static Logger log = Utils.getLogger(Calendar.class.getName());
 
     /**
      * Create a RemoteCalendar.
@@ -63,10 +60,11 @@ public class Calendar {
      *
      * @param digest The digest hash to send.
      * @return the Timestamp received from the calendar.
-     * @throws ExceededSizeException if response is too big.
-     * @throws UrlException          if url is not reachable.
+     * @throws UrlException if url is not reachable.
      */
-    public Timestamp submit(byte[] digest) throws ExceededSizeException, UrlException {
+    public Timestamp submit(byte[] digest) throws UrlException {
+        String submitUrl = url + "/digest";
+
         try {
             Map<String, String> headers = new HashMap<>();
             headers.put("Accept", "application/vnd.opentimestamps.v1");
@@ -78,7 +76,7 @@ public class Calendar {
                 headers.put("x-signature", signature);
             }
 
-            URL obj = new URL(url + "/digest");
+            URL obj = new URL(submitUrl);
             Request task = new Request(obj);
             task.setData(digest);
             task.setHeaders(headers);
@@ -86,14 +84,14 @@ public class Calendar {
             byte[] body = response.getBytes();
 
             if (body.length > 10000) {
-                throw new ExceededSizeException("Calendar response exceeded size limit");
+                throw new ExceededSizeException("Calendar response exceeded size limit 10000 bytes");
             }
 
             StreamDeserializationContext ctx = new StreamDeserializationContext(body);
 
             return Timestamp.deserialize(ctx, digest);
         } catch (Exception e) {
-            throw new UrlException(e.getMessage());
+            throw new UrlException("Could not submit digest to remote calendar at URL: " + submitUrl, e);
         }
     }
 
@@ -102,36 +100,36 @@ public class Calendar {
      *
      * @param commitment The digest hash to send.
      * @return the Timestamp from the calendar server (with blockchain information if already written).
-     * @throws ExceededSizeException       if response is too big.
-     * @throws UrlException                if url is not reachable.
-     * @throws CommitmentNotFoundException if commit is not found.
+     * @throws UrlException if url is not reachable.
      */
-    public Timestamp getTimestamp(byte[] commitment) throws ExceededSizeException, CommitmentNotFoundException, UrlException {
+    public Timestamp getTimestamp(byte[] commitment) throws UrlException {
+        String timestampUrl = url + "/timestamp/" + Utils.bytesToHex(commitment).toLowerCase();
+
         try {
             Map<String, String> headers = new HashMap<>();
             headers.put("Accept", "application/vnd.opentimestamps.v1");
             headers.put("User-Agent", "java-opentimestamps");
             headers.put("Content-Type", "application/x-www-form-urlencoded");
 
-            URL obj = new URL(url + "/timestamp/" + Utils.bytesToHex(commitment).toLowerCase());
+            URL obj = new URL(timestampUrl);
             Request task = new Request(obj);
             task.setHeaders(headers);
             Response response = task.call();
             byte[] body = response.getBytes();
 
             if (body.length > 10000) {
-                throw new ExceededSizeException("Calendar response exceeded size limit");
+                throw new ExceededSizeException("Calendar response exceeded size limit 10000 bytes");
             }
 
             if (!response.isOk()) {
-                throw new CommitmentNotFoundException("com.eternitywall.ots.Calendar response a status code != 200 which is: " + response.getStatus());
+                throw new CommitmentNotFoundException("Calendar response != 200: " + response.getStatus());
             }
 
             StreamDeserializationContext ctx = new StreamDeserializationContext(body);
 
             return Timestamp.deserialize(ctx, commitment);
         } catch (Exception e) {
-            throw new UrlException(e.getMessage());
+            throw new UrlException("Could not get timestamp from remote calendar at URL: " + timestampUrl, e);
         }
     }
 }
