@@ -1,7 +1,5 @@
-package com.eternitywall;
+package com.eternitywall.ots;
 
-import com.eternitywall.ots.BitcoinNode;
-import com.eternitywall.ots.BlockHeader;
 import org.json.JSONObject;
 import org.junit.Test;
 
@@ -10,10 +8,10 @@ import java.util.Properties;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class TestBitcoin {
+public class TestBitcoinNode {
 
     @Test
-    public void testBitcoin() {
+    public void testBitcoinNode() {
         try {
             Properties properties = BitcoinNode.readBitcoinConf();
             BitcoinNode bitcoin = new BitcoinNode(properties);

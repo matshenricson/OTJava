@@ -91,7 +91,6 @@ public class BitcoinNode {
         }
 
         JSONObject json = new JSONObject();
-        json.put("id", "java");
         json.put("method", "getblockheader");
         JSONArray array = new JSONArray();
         array.put(hash);
@@ -108,7 +107,6 @@ public class BitcoinNode {
 
     public String getBlockHash(Integer height) throws Exception {
         JSONObject json = new JSONObject();
-        json.put("id", "java");
         json.put("method", "getblockhash");
         JSONArray array = new JSONArray();
         array.put(height);
@@ -129,7 +127,7 @@ public class BitcoinNode {
         Response response = request.call();
 
         if (response == null) {
-            throw new Exception();
+            throw new Exception("Could not get response from " + urlString);
         }
 
         return new JSONObject(response.getString());
