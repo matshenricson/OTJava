@@ -86,11 +86,11 @@ public class TestCalendar {
             calendar.setKey(key);
             Timestamp timestamp = calendar.submit(digest);
             assertNotNull(timestamp);
-            assertArrayEquals(timestamp.getDigest(), digest);
+            assertArrayEquals(digest, timestamp.getDigest());
         }
     }
 
-    private Map<String, String> getPrivateUrlsMap(String fileName) throws IOException {
+    private static Map<String, String> getPrivateUrlsMap(String fileName) throws IOException {
         Path path = Paths.get(fileName);
 
         if (!Files.exists(path)) {
@@ -124,7 +124,7 @@ public class TestCalendar {
         Optional<Timestamp> timestamp = queue.take();
         assertTrue(timestamp.isPresent());
         assertNotNull(timestamp.get());
-        assertArrayEquals(timestamp.get().getDigest(), digest);
+        assertArrayEquals(digest, timestamp.get().getDigest());
     }
 
     @Test
@@ -147,7 +147,7 @@ public class TestCalendar {
             Optional<Timestamp> timestamp = queue.take();
             assertTrue(timestamp.isPresent());
             assertNotNull(timestamp.get());
-            assertArrayEquals(timestamp.get().getDigest(), digest);
+            assertArrayEquals(digest, timestamp.get().getDigest());
         }
     }
 
