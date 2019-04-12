@@ -48,8 +48,6 @@ public class TestCalendar {
         for (Map.Entry<String, String> entry : privateUrls.entrySet()) {
             String calendarUrl = "https://" + entry.getKey();
             String wifKey = entry.getValue();
-
-            Calendar calendar = new Calendar(calendarUrl);
             ECKey key;
 
             try {
@@ -60,6 +58,7 @@ public class TestCalendar {
                 key = dumpedPrivateKey.getKey();
             }
 
+            Calendar calendar = new Calendar(calendarUrl);
             calendar.setKey(key);
             Timestamp timestamp = calendar.submit(digest);
             assertNotNull(timestamp);
@@ -78,11 +77,9 @@ public class TestCalendar {
         for (Map.Entry<String, String> entry : privateUrls.entrySet()) {
             String calendarUrl = "https://" + entry.getKey();
             String wifKey = entry.getValue();
-
-            Calendar calendar = new Calendar(calendarUrl);
-            ECKey key;
             DumpedPrivateKey dumpedPrivateKey = new DumpedPrivateKey(NetworkParameters.prodNet(), wifKey);
-            key = dumpedPrivateKey.getKey();
+            ECKey key = dumpedPrivateKey.getKey();
+            Calendar calendar = new Calendar(calendarUrl);
             calendar.setKey(key);
             Timestamp timestamp = calendar.submit(digest);
             assertNotNull(timestamp);
@@ -116,9 +113,8 @@ public class TestCalendar {
     public void testSingleAsync() throws Exception {
         String calendarUrl = "https://finney.calendar.eternitywall.com";
         byte[] digest = Utils.randBytes(32);
-        ArrayBlockingQueue<Optional<Timestamp>> queue = new ArrayBlockingQueue<>(1);
-
         CalendarAsyncSubmit task = new CalendarAsyncSubmit(calendarUrl, digest);
+        ArrayBlockingQueue<Optional<Timestamp>> queue = new ArrayBlockingQueue<>(1);
         task.setQueue(queue);
         task.call();
         Optional<Timestamp> timestamp = queue.take();
@@ -136,11 +132,9 @@ public class TestCalendar {
         for (Map.Entry<String, String> entry : privateUrls.entrySet()) {
             String calendarUrl = "https://" + entry.getKey();
             String signature = entry.getValue();
-
-            CalendarAsyncSubmit task = new CalendarAsyncSubmit(calendarUrl, digest);
-            ECKey key;
             BigInteger privKey = new BigInteger(signature);
-            key = ECKey.fromPrivate(privKey);
+            ECKey key = ECKey.fromPrivate(privKey);
+            CalendarAsyncSubmit task = new CalendarAsyncSubmit(calendarUrl, digest);
             task.setKey(key);
             task.setQueue(queue);
             task.call();
@@ -162,19 +156,19 @@ public class TestCalendar {
         ExecutorService executor = Executors.newFixedThreadPool(calendarsUrl.size());
         int m = calendarsUrl.size();
 
-        for (final String calendarUrl : calendarsUrl) {
+        for (String calendarUrl : calendarsUrl) {
             try {
                 CalendarAsyncSubmit task = new CalendarAsyncSubmit(calendarUrl, digest);
                 task.setQueue(queue);
                 executor.submit(task);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.warning("Exception while submitting executor tasks: " + e);
             }
         }
 
         int count = 0;
 
-        for (final String calendarUrl : calendarsUrl) {
+        for (String calendarUrl : calendarsUrl) {
             try {
                 Optional<Timestamp> stamp = queue.take();
                 //timestamp.merge(stamp);
@@ -187,7 +181,7 @@ public class TestCalendar {
                     break;
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.warning("Interrupted while creating timestamp: " + e);
             }
         }
 
@@ -211,19 +205,19 @@ public class TestCalendar {
         ExecutorService executor = Executors.newFixedThreadPool(calendarsUrl.size());
         int m = 2;
 
-        for (final String calendarUrl : calendarsUrl) {
+        for (String calendarUrl : calendarsUrl) {
             try {
                 CalendarAsyncSubmit task = new CalendarAsyncSubmit(calendarUrl, digest);
                 task.setQueue(queue);
                 executor.submit(task);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.warning("Exception while submitting executor tasks: " + e);
             }
         }
 
         int count = 0;
 
-        for (final String calendarUrl : calendarsUrl) {
+        for (String calendarUrl : calendarsUrl) {
             try {
                 Optional<Timestamp> stamp = queue.take();
                 //timestamp.merge(stamp);
@@ -236,7 +230,7 @@ public class TestCalendar {
                     break;
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.warning("Interrupted while creating timestamp: " + e);
             }
         }
 
