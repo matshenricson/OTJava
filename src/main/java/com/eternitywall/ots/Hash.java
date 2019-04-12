@@ -188,10 +188,8 @@ public class Hash {
      */
     @Override
     public String toString() {
-        String output = "com.eternitywall.ots.Hash\n";
-        output += "algorithm: " + this.getOp()._HASHLIB_NAME() + '\n';
-        output += "value: " + Utils.bytesToHex(this.value) + '\n';
-
-        return output;
+        return "com.eternitywall.ots.Hash\n" +
+               "algorithm: " + this.getOp()._HASHLIB_NAME() + '\n' +
+               "value: " + Utils.bytesToHex(this.value) + '\n';
     }
 }
