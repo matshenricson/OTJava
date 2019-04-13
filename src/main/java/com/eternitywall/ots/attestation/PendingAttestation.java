@@ -62,7 +62,7 @@ public class PendingAttestation extends TimeAttestation {
             Character c = String.format("%c", b).charAt(0);
 
             if (PendingAttestation._ALLOWED_URI_CHARS.indexOf(c) < 0) {
-                log.severe("URI contains invalid character ");
+                log.severe("URI contains invalid character: " + c);
 
                 return false;
             }
@@ -75,7 +75,7 @@ public class PendingAttestation extends TimeAttestation {
         byte[] utf8Uri = ctxPayload.readVarbytes(PendingAttestation._MAX_URI_LENGTH);
 
         if (!checkUri(utf8Uri)) {
-            log.severe("Invalid URI: " + utf8Uri);
+            log.severe("Invalid URI: " + new String(utf8Uri, StandardCharsets.UTF_8));
 
             return null;    // TODO: Change to exception?
         }
