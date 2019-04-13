@@ -14,8 +14,8 @@ import java.util.Arrays;
  * The block height is recorded so that looking up the correct block header in
  * an external block header database doesn't require every header to be stored
  * locally (33MB and counting). (remember that a memory-constrained local
- * client can save an MMR that commits to all blocks, and use an external service to fill
- * in pruned details).
+ * client can save an MMR that commits to all blocks, and use an external
+ * service to fill in pruned details).
  * Otherwise no additional redundant data about the block header is recorded.
  * This is very intentional: since the attestation contains (nearly) the
  * absolute bare minimum amount of data, we encourage implementations to do
