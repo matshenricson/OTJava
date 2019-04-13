@@ -74,10 +74,10 @@ public class PendingAttestation extends TimeAttestation {
     public static PendingAttestation deserialize(StreamDeserializationContext ctxPayload) {
         byte[] utf8Uri = ctxPayload.readVarbytes(PendingAttestation._MAX_URI_LENGTH);
 
-        if (!PendingAttestation.checkUri(utf8Uri)) {
-            log.severe("Invalid URI: ");
+        if (!checkUri(utf8Uri)) {
+            log.severe("Invalid URI: " + utf8Uri);
 
-            return null;
+            return null;    // TODO: Change to exception?
         }
 
         return new PendingAttestation(utf8Uri);
