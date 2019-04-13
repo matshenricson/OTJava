@@ -43,7 +43,7 @@ public class TestTimestamp {
         OpAppend opAppend2 = new OpAppend(toBytes("baz", "UTF-8"));
         Timestamp t2 = t1.add(opAppend1);
         Timestamp t3 = t2.add(opAppend2);
-        assertArrayEquals(t1.ops.get(opAppend1).ops.get(opAppend2).msg, toBytes("foobarbaz", "UTF-8"));
+        assertArrayEquals(toBytes("foobarbaz", "UTF-8"), t1.ops.get(opAppend1).ops.get(opAppend2).msg);
 
         t1.ops.put(opAppend1, new Timestamp(toBytes("foobar", "UTF-8")));
 
@@ -113,8 +113,7 @@ public class TestTimestamp {
         Timestamp sha256Stamp = stamp.add(opSHA256);
         // TODO: check testTimestampSerializationDeserialization
 
-        PendingAttestation pendingAttestation = new PendingAttestation(toBytes("deeper", "UTF-8"));
-        sha256Stamp.attestations.add(pendingAttestation);
+        sha256Stamp.attestations.add(new PendingAttestation(toBytes("deeper", "UTF-8")));
 
         baos = new ByteArrayOutputStream();
         baos.write(0xff);
@@ -174,11 +173,11 @@ public class TestTimestamp {
         Timestamp left = new Timestamp(toBytes("foo", "UTF-8"));
         Timestamp right = new Timestamp(toBytes("bar", "UTF-8"));
         Timestamp stampLeftRight = Merkle.catSha256(left, right);
-        assertArrayEquals(stampLeftRight.getDigest(), hexToBytes("c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2"));
+        assertArrayEquals(hexToBytes("c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2"), stampLeftRight.getDigest());
 
         Timestamp righter = new Timestamp(toBytes("baz", "UTF-8"));
         Timestamp stampRighter = Merkle.catSha256(stampLeftRight, righter);
-        assertArrayEquals(stampRighter.getDigest(), hexToBytes("23388b16c66f1fa37ef14af8eb081712d570813e2afb8c8ae86efa726f3b7276"));
+        assertArrayEquals(hexToBytes("23388b16c66f1fa37ef14af8eb081712d570813e2afb8c8ae86efa726f3b7276"), stampRighter.getDigest());
     }
 
     private void defTimestamp(int n, byte[] expectedMerkleRoot) {
@@ -190,7 +189,7 @@ public class TestTimestamp {
         }
 
         Timestamp merkleTip = Merkle.makeMerkleTree(roots);
-        assertArrayEquals(merkleTip.getDigest(), expectedMerkleRoot);
+        assertArrayEquals(expectedMerkleRoot, merkleTip.getDigest());
 
         for (Timestamp root : roots) {
             Set<byte[]> tips = root.allTips();
