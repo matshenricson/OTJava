@@ -21,7 +21,6 @@ public class UnknownAttestation extends TimeAttestation {
     }
 
     UnknownAttestation(byte[] tag, byte[] payload) {
-        super();
         this._TAG = tag;
         this.payload = payload;
     }

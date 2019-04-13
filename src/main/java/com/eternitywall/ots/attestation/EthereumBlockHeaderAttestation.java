@@ -27,7 +27,6 @@ public class EthereumBlockHeaderAttestation extends TimeAttestation {
     }
 
     EthereumBlockHeaderAttestation(int height) {
-        super();
         this.height = height;
     }
 

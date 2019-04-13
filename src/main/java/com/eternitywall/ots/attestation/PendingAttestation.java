@@ -48,7 +48,6 @@ public class PendingAttestation extends TimeAttestation {
     }
 
     public PendingAttestation(byte[] uri) {
-        super();
         this.uri = uri;
     }
 

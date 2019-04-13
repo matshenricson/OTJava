@@ -29,7 +29,6 @@ public class LitecoinBlockHeaderAttestation extends TimeAttestation {
     }
 
     public LitecoinBlockHeaderAttestation(int height) {
-        super();
         this.height = height;
     }
 
