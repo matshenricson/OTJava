@@ -111,13 +111,11 @@ public class PendingAttestation extends TimeAttestation {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof PendingAttestation)) {
+        if (!(other instanceof TimeAttestation)) {
             return false;
         }
 
-        PendingAttestation that = (PendingAttestation) other;
-
-        return Arrays.equals(this.uri, that.uri);
+        return compareTo((TimeAttestation) other) == 0;
     }
 
     @Override

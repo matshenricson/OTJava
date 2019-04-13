@@ -59,17 +59,11 @@ public class UnknownAttestation extends TimeAttestation {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof UnknownAttestation)) {
+        if (!(other instanceof TimeAttestation)) {
             return false;
         }
 
-        UnknownAttestation that = (UnknownAttestation) other;
-
-        if (!Arrays.equals(this._TAG(), that._TAG())) {
-            return false;
-        }
-
-        return Arrays.equals(this.payload, that.payload);
+        return compareTo((TimeAttestation) other) == 0;
     }
 
     @Override

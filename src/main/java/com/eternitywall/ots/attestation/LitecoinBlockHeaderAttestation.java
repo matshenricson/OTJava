@@ -66,13 +66,11 @@ public class LitecoinBlockHeaderAttestation extends TimeAttestation {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof LitecoinBlockHeaderAttestation)) {
+        if (!(other instanceof TimeAttestation)) {
             return false;
         }
 
-        LitecoinBlockHeaderAttestation that = (LitecoinBlockHeaderAttestation) other;
-
-        return this.height == that.height;
+        return compareTo((TimeAttestation) other) == 0;
     }
 
     @Override

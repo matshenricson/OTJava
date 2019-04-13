@@ -64,13 +64,11 @@ public class EthereumBlockHeaderAttestation extends TimeAttestation {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof EthereumBlockHeaderAttestation)) {
+        if (!(other instanceof TimeAttestation)) {
             return false;
         }
 
-        EthereumBlockHeaderAttestation that = (EthereumBlockHeaderAttestation) other;
-
-        return this.height == that.height;
+        return compareTo((TimeAttestation) other) == 0;
     }
 
     @Override
