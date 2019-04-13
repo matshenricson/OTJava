@@ -29,7 +29,11 @@ They have nothing to do with this fork, which is written by:
 
 * https://github.com/matshenricson
 
-I work alone, directly on master/trunk, and my philosophy is to depend on extensive unit and system tests, and work fast.
+I currently work alone, directly on master/trunk, and my philosophy is:
+
+* Depend on extensive unit and system tests
+* As small commits as possible
+* Work fast
 
 ## Compatibility
 
