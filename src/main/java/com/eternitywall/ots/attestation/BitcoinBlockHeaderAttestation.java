@@ -40,7 +40,6 @@ public class BitcoinBlockHeaderAttestation extends TimeAttestation {
 
     private int height;
 
-    @Override
     public byte[] _TAG() {
         return BitcoinBlockHeaderAttestation._TAG;
     }
@@ -69,9 +68,15 @@ public class BitcoinBlockHeaderAttestation extends TimeAttestation {
         return "BitcoinBlockHeaderAttestation(" + this.height + ")";
     }
 
-    @Override
     public int compareTo(TimeAttestation other) {
+        int deltaTag = Utils.compare(this._TAG(), other._TAG());
+
+        if (deltaTag != 0) {
+            return deltaTag;
+        }
+
         if (!(other instanceof BitcoinBlockHeaderAttestation)) {
+            // This is very unlikely, but possible, since UnknownAttestation can have any tag
             return this.getClass().getName().compareTo(other.getClass().getName());   // This makes the comparison symmetric
         }
 
@@ -87,10 +92,6 @@ public class BitcoinBlockHeaderAttestation extends TimeAttestation {
         }
 
         BitcoinBlockHeaderAttestation that = (BitcoinBlockHeaderAttestation) other;
-
-        if (!Arrays.equals(this._TAG(), that._TAG())) {
-            return false;
-        }
 
         return this.height == that.height;
     }

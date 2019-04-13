@@ -39,7 +39,6 @@ public class PendingAttestation extends TimeAttestation {
 
     private byte[] uri;
 
-    @Override
     public byte[] _TAG() {
         return PendingAttestation._TAG;
     }
@@ -55,7 +54,7 @@ public class PendingAttestation extends TimeAttestation {
 
     public static boolean checkUri(byte[] uri) {
         if (uri.length > PendingAttestation._MAX_URI_LENGTH) {
-            System.err.print("URI exceeds maximum length");
+            log.severe("URI length exceeds maximum: " + uri.length);
 
             return false;
         }
@@ -94,9 +93,15 @@ public class PendingAttestation extends TimeAttestation {
         return "PendingAttestation(\'" + new String(this.uri, StandardCharsets.UTF_8) + "\')";
     }
 
-    @Override
     public int compareTo(TimeAttestation other) {
+        int deltaTag = Utils.compare(this._TAG(), other._TAG());
+
+        if (deltaTag != 0) {
+            return deltaTag;
+        }
+
         if (!(other instanceof PendingAttestation)) {
+            // This is very unlikely, but possible, since UnknownAttestation can have any tag
             return this.getClass().getName().compareTo(other.getClass().getName());   // This makes the comparison symmetric
         }
 
@@ -112,10 +117,6 @@ public class PendingAttestation extends TimeAttestation {
         }
 
         PendingAttestation that = (PendingAttestation) other;
-
-        if (!Arrays.equals(this._TAG(), that._TAG())) {
-            return false;
-        }
 
         return Arrays.equals(this.uri, that.uri);
     }

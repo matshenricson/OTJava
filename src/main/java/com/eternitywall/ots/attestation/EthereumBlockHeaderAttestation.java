@@ -2,6 +2,7 @@ package com.eternitywall.ots.attestation;
 
 import com.eternitywall.ots.StreamDeserializationContext;
 import com.eternitywall.ots.StreamSerializationContext;
+import com.eternitywall.ots.Utils;
 
 import java.util.Arrays;
 
@@ -17,7 +18,6 @@ public class EthereumBlockHeaderAttestation extends TimeAttestation {
 
     private int height;
 
-    @Override
     public byte[] _TAG() {
         return EthereumBlockHeaderAttestation._TAG;
     }
@@ -46,9 +46,15 @@ public class EthereumBlockHeaderAttestation extends TimeAttestation {
         return "EthereumBlockHeaderAttestation(" + this.height + ")";
     }
 
-    @Override
     public int compareTo(TimeAttestation other) {
+        int deltaTag = Utils.compare(this._TAG(), other._TAG());
+
+        if (deltaTag != 0) {
+            return deltaTag;
+        }
+
         if (!(other instanceof EthereumBlockHeaderAttestation)) {
+            // This is very unlikely, but possible, since UnknownAttestation can have any tag
             return this.getClass().getName().compareTo(other.getClass().getName());   // This makes the comparison symmetric
         }
 
@@ -64,10 +70,6 @@ public class EthereumBlockHeaderAttestation extends TimeAttestation {
         }
 
         EthereumBlockHeaderAttestation that = (EthereumBlockHeaderAttestation) other;
-
-        if (!Arrays.equals(this._TAG(), that._TAG())) {
-            return false;
-        }
 
         return this.height == that.height;
     }

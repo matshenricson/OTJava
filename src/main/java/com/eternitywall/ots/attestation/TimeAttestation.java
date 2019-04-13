@@ -2,7 +2,6 @@ package com.eternitywall.ots.attestation;
 
 import com.eternitywall.ots.StreamDeserializationContext;
 import com.eternitywall.ots.StreamSerializationContext;
-import com.eternitywall.ots.Utils;
 
 import java.util.Arrays;
 
@@ -14,11 +13,7 @@ public abstract class TimeAttestation implements Comparable<TimeAttestation> {
     public static final int _TAG_SIZE = 8;
     public static final int _MAX_PAYLOAD_SIZE = 8192;
 
-    public byte[] _TAG;
-
-    public byte[] _TAG() {
-        return new byte[]{};
-    }
+    public abstract byte[] _TAG();
 
     /**
      * Deserialize a general Time Attestation to the specific subclass Attestation.
@@ -63,18 +58,5 @@ public abstract class TimeAttestation implements Comparable<TimeAttestation> {
         ctx.writeVarbytes(ctxPayload.getOutput());
     }
 
-    public void serializePayload(StreamSerializationContext ctxPayload) {
-        // TODO: Is this intentional?
-    }
-
-    @Override
-    public int compareTo(TimeAttestation other) {
-        int deltaTag = Utils.compare(this._TAG(), other._TAG());
-
-        if (deltaTag == 0) {
-            return this.compareTo(other);     // TODO: Wouldn't this be an infinite recursive call ???
-        } else {
-            return deltaTag;
-        }
-    }
+    public abstract void serializePayload(StreamSerializationContext ctxPayload);
 }

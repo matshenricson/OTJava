@@ -14,9 +14,8 @@ import java.util.Arrays;
 public class UnknownAttestation extends TimeAttestation {
 
     byte[] payload;
-    public static byte[] _TAG = new byte[]{};     // TODO: Static ???
+    public byte[] _TAG;
 
-    @Override
     public byte[] _TAG() {
         return _TAG;
     }
@@ -42,9 +41,15 @@ public class UnknownAttestation extends TimeAttestation {
         return "UnknownAttestation " + Utils.bytesToHex(this._TAG()) + ' ' + Utils.bytesToHex(this.payload);
     }
 
-    @Override
     public int compareTo(TimeAttestation other) {
+        int deltaTag = Utils.compare(this._TAG(), other._TAG());
+
+        if (deltaTag != 0) {
+            return deltaTag;
+        }
+
         if (!(other instanceof UnknownAttestation)) {
+            // This is very unlikely, but possible, since UnknownAttestation can have any tag
             return this.getClass().getName().compareTo(other.getClass().getName());   // This makes the comparison symmetric
         }
 
