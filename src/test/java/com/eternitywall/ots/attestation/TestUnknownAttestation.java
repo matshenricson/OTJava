@@ -16,26 +16,29 @@ import static org.junit.Assert.assertEquals;
 public class TestUnknownAttestation {
 
     @Test
-    public void string() {
+    public void testToString() {
         UnknownAttestation a = new UnknownAttestation(hexToBytes("0102030405060708"),
                                                       toBytes("Hello World!", "UTF-8"));
 
-        String string = "UnknownAttestation " + bytesToHex(a._TAG()) + ' ' + bytesToHex(a.payload);
-        assertEquals(a.toString(), string);
+        String expectedString = "UnknownAttestation " + bytesToHex(a._TAG()) + ' ' + bytesToHex(a.payload);
+        assertEquals(expectedString, a.toString());
     }
 
     @Test
     public void testSerializationDeserializationOfUnknownAttestations() throws IOException {
+        byte[] tagBytes = hexToBytes("0102030405060708");
+        byte[] helloWorldBytes = toBytes("Hello World!", "UTF-8");
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        baos.write(hexToBytes("0102030405060708"));
+        baos.write(tagBytes);
         baos.write(0x0c);
-        baos.write(toBytes("Hello World!", "UTF-8"));
+        baos.write(helloWorldBytes);
         byte[] expectedSerialized = baos.toByteArray();
 
         StreamDeserializationContext ctx = new StreamDeserializationContext(baos.toByteArray());
         UnknownAttestation a = (UnknownAttestation) TimeAttestation.deserialize(ctx);
-        assertArrayEquals(a._TAG(), hexToBytes("0102030405060708"));
-        assertArrayEquals(a.payload, toBytes("Hello World!", "UTF-8"));
+        assertArrayEquals(tagBytes, a._TAG());
+        assertArrayEquals(helloWorldBytes, a.payload);
 
         StreamSerializationContext ctx1 = new StreamSerializationContext();
         a.serialize(ctx1);
@@ -43,7 +46,7 @@ public class TestUnknownAttestation {
     }
 
     @Test
-    public void deserializationTooLong() throws IOException {
+    public void testDeserializationTooLong() throws IOException {
         // Deserialization of attestations with oversized payloads
         ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
         baos1.write(hexToBytes("0102030405060708"));
