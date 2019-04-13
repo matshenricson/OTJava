@@ -22,14 +22,8 @@ public abstract class TimeAttestation implements Comparable<TimeAttestation> {
      * @return The specific subclass Attestation.
      */
     public static TimeAttestation deserialize(StreamDeserializationContext ctx) {
-        // console.log('attestation deserialize');
-
         byte[] tag = ctx.readBytes(_TAG_SIZE);
-        // console.log('tag: ', com.eternitywall.ots.Utils.bytesToHex(tag));
-
         byte[] serializedAttestation = ctx.readVarbytes(_MAX_PAYLOAD_SIZE);
-        // console.log('serializedAttestation: ', com.eternitywall.ots.Utils.bytesToHex(serializedAttestation));
-
         StreamDeserializationContext ctxPayload = new StreamDeserializationContext(serializedAttestation);
 
         /* eslint no-use-before-define: ["error", { "classes": false }] */
