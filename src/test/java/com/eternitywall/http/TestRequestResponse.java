@@ -1,5 +1,6 @@
 package com.eternitywall.http;
 
+import com.eternitywall.ots.OpenTimestamps;
 import org.junit.Test;
 
 import java.net.URL;
@@ -19,7 +20,7 @@ public class TestRequestResponse {
 
     @Test
     public void testHttps() throws Exception {
-        Request request = new Request(new URL("https://finney.calendar.eternitywall.com"));
+        Request request = new Request(new URL(OpenTimestamps.FINNEY_URL));
         Response response = request.call();
         assertTrue(response.isOk());
         assertNotNull(response.getString());

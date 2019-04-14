@@ -1,5 +1,6 @@
 package com.eternitywall;
 
+import com.eternitywall.ots.OpenTimestamps;
 import com.eternitywall.ots.StreamDeserializationContext;
 import com.eternitywall.ots.StreamSerializationContext;
 import com.eternitywall.ots.Timestamp;
@@ -32,7 +33,7 @@ public class TestStreamDeserializationContext {
 
     @Test
     public void testReadvaruint() {
-        final byte[] uri = "https://finney.calendar.eternitywall.com".getBytes(StandardCharsets.US_ASCII);
+        final byte[] uri = OpenTimestamps.FINNEY_URL.getBytes(StandardCharsets.US_ASCII);
         PendingAttestation pendingAttestation = new PendingAttestation(uri);
 
         StreamSerializationContext streamSerializationContext = new StreamSerializationContext();

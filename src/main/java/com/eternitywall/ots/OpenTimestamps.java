@@ -7,7 +7,6 @@ import com.eternitywall.ots.attestation.PendingAttestation;
 import com.eternitywall.ots.attestation.TimeAttestation;
 import com.eternitywall.ots.exceptions.VerificationException;
 import com.eternitywall.ots.op.OpAppend;
-import com.eternitywall.ots.op.OpCrypto;
 import com.eternitywall.ots.op.OpSHA256;
 import org.bitcoinj.core.DumpedPrivateKey;
 import org.bitcoinj.core.ECKey;
@@ -36,6 +35,10 @@ import java.util.logging.Logger;
  */
 public class OpenTimestamps {
 
+    public static final String ALICE_URL = "https://alice.btc.calendar.opentimestamps.org";
+    public static final String BOB_URL = "https://bob.btc.calendar.opentimestamps.org";
+    public static final String FINNEY_URL = "https://finney.calendar.eternitywall.com";
+
     private static Logger log = Utils.getLogger(OpenTimestamps.class.getName());
 
     /**
@@ -61,7 +64,7 @@ public class OpenTimestamps {
         }
 
         String fileHash = Utils.bytesToHex(detachedTimestampFile.timestamp.msg).toLowerCase();
-        String hashOp = ((OpCrypto) detachedTimestampFile.fileHashOp)._TAG_NAME();
+        String hashOp = detachedTimestampFile.fileHashOp._TAG_NAME();
 
         String firstLine = "File " + hashOp + " hash: " + fileHash + '\n';
 
@@ -137,7 +140,6 @@ public class OpenTimestamps {
      * @throws IOException if fileTimestamp is not valid, or the stamp procedure fails.
      */
     public static Timestamp stamp(List<DetachedTimestampFile> fileTimestamps, List<String> calendarsUrl, Integer m, HashMap<String, String> privateCalendarsUrl) throws IOException {
-        // Parse parameters
         if (fileTimestamps == null || fileTimestamps.isEmpty()) {
             throw new IOException("No fileTimestamps available: " + fileTimestamps);
         }
@@ -147,10 +149,7 @@ public class OpenTimestamps {
         }
 
         if ((calendarsUrl == null || calendarsUrl.isEmpty()) && privateCalendarsUrl.isEmpty()) {
-            calendarsUrl = new ArrayList<>();
-            calendarsUrl.add("https://alice.btc.calendar.opentimestamps.org");
-            calendarsUrl.add("https://bob.btc.calendar.opentimestamps.org");
-            calendarsUrl.add("https://finney.calendar.eternitywall.com");
+            calendarsUrl = Arrays.asList(ALICE_URL, BOB_URL, FINNEY_URL);
         }
 
         if (m == null || m <= 0) {
@@ -164,15 +163,14 @@ public class OpenTimestamps {
         }
 
         if (m < 0 || m > calendarsUrl.size() + privateCalendarsUrl.size()) {
-            log.severe("m cannot be greater than available calendar neither less or equal 0");
-            throw new IOException();
+            throw new IOException("m cannot be greater than available calendar neither less or equal 0");
         }
 
         // Build merkle tree
         Timestamp merkleTip = OpenTimestamps.makeMerkleTree(fileTimestamps);
 
         if (merkleTip == null) {
-            throw new IOException();
+            throw new IOException("Could not make merkle tree");
         }
 
         // Stamping
@@ -230,7 +228,7 @@ public class OpenTimestamps {
         }
 
         // Submit to all public calendars
-        for (final String calendarUrl : calendarUrls) {
+        for (String calendarUrl : calendarUrls) {
             log.info("Submitting to remote calendar " + calendarUrl);
 
             try {
@@ -301,15 +299,13 @@ public class OpenTimestamps {
      *
      * @param ots     The DetachedTimestampFile containing the proof to verify.
      * @param stamped The DetachedTimestampFile containing the stamped data.
-     * @return Hashmap of block heights and timestamps indexed by chain: timestamp in seconds from 1 January 1970.
+     * @return HashMap of block heights and timestamps indexed by chain: timestamp in seconds from 1 January 1970.
      * @throws Exception if the verification procedure fails.
      */
 
     public static HashMap<VerifyResult.Chains, VerifyResult> verify(DetachedTimestampFile ots, DetachedTimestampFile stamped) throws Exception {
         if (!Arrays.equals(ots.fileDigest(), stamped.fileDigest())) {
-            log.severe("Expected digest " + Utils.bytesToHex(ots.fileDigest()).toLowerCase());
-            log.severe("File does not match original!");
-            throw new Exception("File does not match original!");
+            throw new Exception("Expected digest: " + Utils.bytesToHex(ots.fileDigest()).toLowerCase() + ". File does not match original!");
         }
 
         return OpenTimestamps.verify(ots.timestamp);
@@ -468,7 +464,6 @@ public class OpenTimestamps {
             for (TimeAttestation attestation : subStamp.attestations) {
                 if (attestation instanceof PendingAttestation && !subStamp.isTimestampComplete()) {
                     String calendarUrl = new String(((PendingAttestation) attestation).getUri(), StandardCharsets.UTF_8);
-                    // var calendarUrl = calendarUrls[0];
                     byte[] commitment = subStamp.msg;
 
                     try {

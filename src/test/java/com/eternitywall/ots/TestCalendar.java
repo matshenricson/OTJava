@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +30,8 @@ public class TestCalendar {
 
     @Test
     public void testSingle() throws Exception {
-        String calendarUrl = "https://finney.calendar.eternitywall.com";
         byte[] digest = Utils.randBytes(32);
-        Calendar calendar = new Calendar(calendarUrl);
+        Calendar calendar = new Calendar(OpenTimestamps.FINNEY_URL);
         Timestamp timestamp = calendar.submit(digest);
         assertNotNull(timestamp);
         assertArrayEquals(digest, timestamp.getDigest());
@@ -111,9 +111,8 @@ public class TestCalendar {
 
     @Test
     public void testSingleAsync() throws Exception {
-        String calendarUrl = "https://finney.calendar.eternitywall.com";
         byte[] digest = Utils.randBytes(32);
-        CalendarAsyncSubmit task = new CalendarAsyncSubmit(calendarUrl, digest);
+        CalendarAsyncSubmit task = new CalendarAsyncSubmit(OpenTimestamps.FINNEY_URL, digest);
         ArrayBlockingQueue<Optional<Timestamp>> queue = new ArrayBlockingQueue<>(1);
         task.setQueue(queue);
         task.call();
@@ -147,10 +146,7 @@ public class TestCalendar {
 
     @Test
     public void testMulti() throws Exception {
-        List<String> calendarsUrl = new ArrayList<String>();
-        calendarsUrl.add("https://alice.btc.calendar.opentimestamps.org");
-        calendarsUrl.add("https://bob.btc.calendar.opentimestamps.org");
-        calendarsUrl.add("https://finney.calendar.eternitywall.com");
+        List<String> calendarsUrl = Arrays.asList(OpenTimestamps.ALICE_URL, OpenTimestamps.BOB_URL, OpenTimestamps.FINNEY_URL);
         byte[] digest = Utils.randBytes(32);
         ArrayBlockingQueue<Optional<Timestamp>> queue = new ArrayBlockingQueue<>(calendarsUrl.size());
         ExecutorService executor = Executors.newFixedThreadPool(calendarsUrl.size());
@@ -196,10 +192,7 @@ public class TestCalendar {
 
     @Test
     public void testMultiWithInvalidCalendar() throws Exception {
-        List<String> calendarsUrl = new ArrayList<String>();
-        calendarsUrl.add("https://alice.btc.calendar.opentimestamps.org");
-        calendarsUrl.add("https://bob.btc.calendar.opentimestamps.org");
-        calendarsUrl.add("");
+        List<String> calendarsUrl = Arrays.asList(OpenTimestamps.ALICE_URL, OpenTimestamps.BOB_URL, "");
         byte[] digest = Utils.randBytes(32);
         ArrayBlockingQueue<Optional<Timestamp>> queue = new ArrayBlockingQueue<>(calendarsUrl.size());
         ExecutorService executor = Executors.newFixedThreadPool(calendarsUrl.size());
