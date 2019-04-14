@@ -20,8 +20,8 @@ import java.util.Map.Entry;
 public class Timestamp {
 
     public byte[] msg;
-    public List<TimeAttestation> attestations;
-    public HashMap<Op, Timestamp> ops;
+    public List<TimeAttestation> attestations = new ArrayList<>();
+    public HashMap<Op, Timestamp> ops = new HashMap<>();
 
     /**
      * Create a com.eternitywall.ots.Timestamp object.
@@ -30,8 +30,6 @@ public class Timestamp {
      */
     public Timestamp(byte[] msg) {
         this.msg = msg;
-        this.attestations = new ArrayList<>();
-        this.ops = new HashMap<>();
     }
 
     /**
