@@ -25,15 +25,15 @@ public class TestTimestamp {
 
     @Test
     public void testAddingOperationsToTimestamps() {
-        Timestamp t = new Timestamp(toBytes("abcd", "UTF-8"));
-
+        Timestamp timestamp = new Timestamp(toBytes("abcd", "UTF-8"));
         OpAppend opAppend = new OpAppend(toBytes("efgh", "UTF-8"));
-        t.add(opAppend);
+        timestamp.add(opAppend);
+        Timestamp expectedTimestamp = new Timestamp(toBytes("abcdefgh", "UTF-8"));
+        assertEquals(expectedTimestamp, timestamp.ops.get(opAppend));
 
         // The second add should succeed with the timestamp unchanged
-        t.add(opAppend);
-        Timestamp tComplete = new Timestamp(toBytes("abcdefgh", "UTF-8"));
-        assertTrue(t.ops.get(opAppend).equals(tComplete));
+        timestamp.add(opAppend);
+        assertEquals(expectedTimestamp, timestamp.ops.get(opAppend));
     }
 
     @Test

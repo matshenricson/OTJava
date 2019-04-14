@@ -528,13 +528,20 @@ public class Timestamp {
      * @param other the timestamp to compare with
      * @return Returns true if timestamps are equals
      */
-    public boolean equals(Timestamp other) {
-        if (!Arrays.equals(this.getDigest(), other.getDigest())) {
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Timestamp)) {
+            return false;
+        }
+
+        Timestamp that = (Timestamp) other;
+
+        if (!Arrays.equals(this.getDigest(), that.getDigest())) {
             return false;
         }
 
         // Check attestations
-        if (this.attestations.size() != other.attestations.size()) {
+        if (this.attestations.size() != that.attestations.size()) {
             return false;
         }
 
@@ -542,7 +549,7 @@ public class Timestamp {
 
         for (int i = 0; i < this.attestations.size(); i++) {
             TimeAttestation ta1 = this.attestations.get(i);
-            TimeAttestation ta2 = other.attestations.get(i);
+            TimeAttestation ta2 = that.attestations.get(i);
 
             if (!(ta1.equals(ta2))) {
                 return false;
@@ -550,13 +557,13 @@ public class Timestamp {
         }
 
         // Check operations
-        if (this.ops.size() != other.ops.size()) {
+        if (this.ops.size() != that.ops.size()) {
             return false;
         }
 
         // Order list of operations
         List<Map.Entry<Op, Timestamp>> list1 = sortToList(this.ops.entrySet());
-        List<Map.Entry<Op, Timestamp>> list2 = sortToList(other.ops.entrySet());
+        List<Map.Entry<Op, Timestamp>> list2 = sortToList(that.ops.entrySet());
 
         for (int i = 0; i < list1.size(); i++) {
             Op op1 = list1.get(i).getKey();
