@@ -59,18 +59,18 @@ public class Timestamp {
      * @return The deserialized Timestamp.
      */
     public static Timestamp deserialize(StreamDeserializationContext ctx, byte[] initialMsg) {
-        Timestamp self = new Timestamp(initialMsg);
+        Timestamp timestamp = new Timestamp(initialMsg);
         byte tag = ctx.readBytes(1)[0];
 
         while ((tag & 0xff) == 0xff) {
             byte current = ctx.readBytes(1)[0];
-            doTagOrAttestation(self, ctx, current, initialMsg);
+            doTagOrAttestation(timestamp, ctx, current, initialMsg);
             tag = ctx.readBytes(1)[0];
         }
 
-        doTagOrAttestation(self, ctx, tag, initialMsg);
+        doTagOrAttestation(timestamp, ctx, tag, initialMsg);
 
-        return self;
+        return timestamp;
     }
 
     private static void doTagOrAttestation(Timestamp self, StreamDeserializationContext ctx, byte tag, byte[] initialMsg) {
@@ -81,8 +81,8 @@ public class Timestamp {
             Op op = Op.deserializeFromTag(ctx, tag);
             byte[] result = op.call(initialMsg);
 
-            Timestamp stamp = Timestamp.deserialize(ctx, result);
-            self.ops.put(op, stamp);
+            Timestamp timestamp = Timestamp.deserialize(ctx, result);
+            self.ops.put(op, timestamp);
         }
     }
 
@@ -152,8 +152,7 @@ public class Timestamp {
      */
     public void merge(Timestamp other) throws Exception {
         if (!Arrays.equals(this.msg, other.msg)) {
-            //log.severe("Can\'t merge timestamps for different messages together");
-            throw new Exception("Can\'t merge timestamps for different messages together");
+            throw new Exception("Can't merge timestamps for different messages together");
         }
 
         this.attestations.addAll(other.attestations);
@@ -181,33 +180,32 @@ public class Timestamp {
      * @throws Exception no attestation founds.
      */
     public TimeAttestation shrink() throws Exception {
-        // Get all attestations
         HashMap<byte[], TimeAttestation> allAttestations = this.allAttestations();
 
         if (allAttestations.isEmpty()) {
-            throw new Exception();     // TODO: Need a descriptive exception string here
+            throw new Exception("Can't shrink timestamp since there are no attestations");
         } else if (allAttestations.size() == 1) {
             return allAttestations.values().iterator().next();
         } else if (this.ops.isEmpty()) {
-            throw new Exception();     // TODO: Need a descriptive exception string here
+            throw new Exception("Can't shrink timestamp since there are no operations");
         }
 
-        // Fore >1 attestations :
+        // For >1 attestations :
         // Search first BitcoinBlockHeaderAttestation
-        TimeAttestation minAttestation = null;
+        BitcoinBlockHeaderAttestation minAttestation = null;
 
         for (Map.Entry<Op, Timestamp> entry : this.ops.entrySet()) {
             Timestamp timestamp = entry.getValue();
 
             for (TimeAttestation attestation : timestamp.getAttestations()) {
                 if (attestation instanceof BitcoinBlockHeaderAttestation) {
+                    BitcoinBlockHeaderAttestation bitcoinAttestation = (BitcoinBlockHeaderAttestation) attestation;
+
                     if (minAttestation == null) {
-                        minAttestation = attestation;
+                        minAttestation = bitcoinAttestation;
                     } else {
-                        if (minAttestation instanceof BitcoinBlockHeaderAttestation
-                                && ((BitcoinBlockHeaderAttestation) minAttestation).getHeight()
-                                > ((BitcoinBlockHeaderAttestation) attestation).getHeight()) {
-                            minAttestation = attestation;
+                        if (minAttestation.getHeight() > bitcoinAttestation.getHeight()) {
+                            minAttestation = bitcoinAttestation;
                         }
                     }
                 }
@@ -447,14 +445,7 @@ public class Timestamp {
      * @return Set of all timestamp attestations.
      */
     public Set<TimeAttestation> getAttestations() {
-        Set<TimeAttestation> set = new HashSet<>();
-
-        for (Map.Entry<byte[], TimeAttestation> item : this.allAttestations().entrySet()) {
-            TimeAttestation attestation = item.getValue();
-            set.add(attestation);
-        }
-
-        return set;
+        return new HashSet<>(this.allAttestations().values());
     }
 
     /**
@@ -463,10 +454,7 @@ public class Timestamp {
      * @return True if the timestamp is complete, False otherwise.
      */
     public Boolean isTimestampComplete() {
-        for (Map.Entry<byte[], TimeAttestation> item : this.allAttestations().entrySet()) {
-            //byte[] msg = item.getKey();
-            TimeAttestation attestation = item.getValue();
-
+        for (TimeAttestation attestation : this.allAttestations().values()) {
             if (attestation instanceof BitcoinBlockHeaderAttestation) {
                 return true;
             }
@@ -487,14 +475,11 @@ public class Timestamp {
             map.put(this.msg, attestation);
         }
 
-        for (Map.Entry<Op, Timestamp> entry : this.ops.entrySet()) {
-            Timestamp ts = entry.getValue();
+        for (Timestamp ts : this.ops.values()) {
             HashMap<byte[], TimeAttestation> subMap = ts.allAttestations();
 
             for (Map.Entry<byte[], TimeAttestation> item : subMap.entrySet()) {
-                byte[] msg = item.getKey();
-                TimeAttestation attestation = item.getValue();
-                map.put(msg, attestation);
+                map.put(item.getKey(), item.getValue());
             }
         }
 
