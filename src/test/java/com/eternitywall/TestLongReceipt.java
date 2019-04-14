@@ -6,14 +6,12 @@ import com.eternitywall.ots.Timestamp;
 import org.junit.Test;
 
 import javax.xml.bind.DatatypeConverter;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.Assert.fail;
 
 public class TestLongReceipt {
     @Test
-    public void testException() {
+    public void testException() throws Exception {
         String digest = "c858838f62f908c922f9cd734e49c8fa6ee9a3b8a77093ac0969cba429249412";
         byte[] digestByte = DatatypeConverter.parseHexBinary(digest);
         Timestamp root = new Timestamp(digestByte);
@@ -23,22 +21,13 @@ public class TestLongReceipt {
         String bob = "8BDwT6khsZrtv1BAULQSWYq4CPAgMt+TgQkEzLPogxtjMSlYsOfKr8EN0TyMc61N2dFNnK4I8CBoTlCeteZ7nMtN3fVbFuUksi5phQj8ryKS4v2xmCxcbgjxBFq5QzrwCE8Bj+rhL1Vv/wCD3+MNLvkMjiwraHR0cHM6Ly9ib2IuYnRjLmNhbGVuZGFyLm9wZW50aW1lc3RhbXBzLm9yZwjxIEb4yUZCFUFW74EhzhUGW4BiU7ulcp0Qk0N3Q7/L6Si1CPEg66TbJUViy1WntuQ/WOVRdPQQagy+S6ce4urTzfq3718I8SA/ggTUy3tlfB1bj7sVV9/xSyzZz4NjWZU5rhT4yllcvQjxIKbo/3jrimpFl4lmOCi5csr6CScXp0NJfZ95tFopR3vjCPEgk68/PQT1dIjZqBnpx06r6PHGADfL+iYUX4KX0pQc2ZQI8CBgiFzPYrFZEPXdiewi1Zun2sw2OWojuYfUgOcgzSlSJgjxIAS5mL/miIoUAHFU63aB4BaYeGNoEwpClnxUHfireSsyCPAgukSIEKll/0Bup9f1mP15NybSZmJbiujgJ9Kooi98P/8I8SDXxUxbSqT1OyL/pImNNaFe8ozDOw4+l+hw0pbFfnEX7QjxINI6E8haP+pKCNOAnacB5q2fp/Xnc31aKH+zXjF8DweuCPEgbB8Q5z/7swD/7mQElrhdaqFNIfgCfMQa15WLNyC/DlUI8CDN5862xCwHuuWtcPVu4wyhAz3r03Pvd++Gw2C56zF79QjxWQEAAAAB8U0E26g2KhA0luvvNogANWaC0JKf/9HHqwL3m7FxrQAAAAAAAP3///8CDUwzAAAAAAAWABQNuE08uA4/5oWDRYPWIW0HNrwSZgAAAAAAAAAAImog8ATM3AcACAjwIFPFQswDxLLV3n0nlvgNYGx9EBftsciWh6RiOq38Ls6gCAjwIKhliqZ1LZU8Pj6BHv6hDg/+Izs45W1OBxlVv0Ee3qB9CAjxICM8br4k7yxjpdu/2D0/cPyHv+BVXek9jv7JIDOj4nu7CAjwIFDU4U7azSrBcU8WnMSWfS548+WzAtOVEdo1Jj1o/7vqCAjxIMVmKnQSccupOdbdrx9TqIl6ipQTVcbeJmCcGmV1CNLLCAjxIPiyB2GYbN4nhR+Mmlxs8K/duwYcsrTN9BcvlSKrYyh6CAjxIMNwTm4Fl/t8mZZq/+BSbyFBMlmbE4XI7y7VY7pOeoo8CAjwIHvFUVHClQ4Ib4vSjndwspyWCstPFT0Ea5NxIf2rwAKICAjwIOXXYnsl4/cqlhCejZMPsgjrXUpr1AgqdATMN2mzNKZNCAjwIK6ZnepQvoFd10wFLot4JhDbuIIIUWi5LV0ypSVUudoVCAjwINV/PNKosv6k+ZCu9x23ZHfVVQrkluB6VuepIh6q5KO/CAjwIHLxA7KubJP8/HayVLtjMIH+NpXqNP/d+2B7YkuLH6AYCAgABYiWDXPXGQEDzbkf";
         String finney = "8BAqDeHtoPbxGQqr3cKPElH+CPEgK+N+N51Jo5plrOgUfaialm8g7RIl0i/CElYhyNQvwzQI8CC8PPLUsPh21UQqi+AqkUloB4Bmyf3TsdkpFkWOik0gCAjxIFbG9VpzqCgGrLNRa+C3R8Y1pEBEkkvL43OP/cXKZ9HjCPEEWrlDOfAImYOSAi3UKVj/AIPf4w0u+QyOKShodHRwczovL2Zpbm5leS5jYWxlbmRhci5ldGVybml0eXdhbGwuY29tCPAgaF8YYd74tCvipT4Vj0TpOY0F6hFumGuvG7Gt76QQho4I8CAHY3Ifn+Dwy4e06CRYKOfKqBt/Z2PfkDN3iJxeFa2ltgjwIMEa+29UJje8uLMuOUSo6cSRPpSc5xfNZ0vQzhDxjea2CPAgG3zfM489Lnk2KZ7ZDthrU3Kol6AwiYU/dL+ajjb5C/AI8SAQOT4E640EqeT/lQLilgRbBGWkxjSAKOPBes/vF07u+wjwILGODOZj7XUYq8H9OQq3PhVcVUWk+qTcOWwoycIS3h4rCPEgfWXAjbOvccrCVRgudC3LsS9g+UaxznYaaoZwoQcLy9wI8SBq/JQlR9apV48ILFcxgKGI+5G0HiWGP5VQeRQAmh5abgjwIAhddljFcmCMcmE/RAKyNMJFPrUH1Fa/vj6glSklJyrtCPEgcVjAhQyT+DpVBXBpzn+1MqjJwoLseYu7tfMGzJs4O4YI8CCv329jnbLYRQuDGmYYsD4kscCFzaqZb2o7kxQz7LD29QjwIMQKClKrl+ZXl43WkN0DnEicE/dFk//1W+haNUJH9gEpCPAg155mOD+GlyOD4Aej2r+BqofR1eTkTwTAlR5EoIyVPaQI8XEBAAAAAVaj5T2j5SkGUlgoVBsk6LjSTAiBab+9tHC8kDNEGUxZAAAAABcWABSMvUQJ6B5hj5+HlvUIYKCQVHXtHf3///8CZJEpAAAAAAAXqRSxSn76ORPndk+exI7QKqRy6jgEB4cAAAAAAAAAACJqIPAE3dwHAAgI8SB/296kvU7oSYjGH9CKTV+/H+azFxE0l1HtUf7rtYZVFAgI8SBAo5Ww0LeZSPnbeY699dL4kaK9mFhVJ8SV+foKdm3CPQgI8CDYYtN0BknZXwtUCqKd5+aEGmr9YOCfSnchSjOXSHpxUQgI8CDEa3gUw136BoZjmiMSEnFS2lL/3wZtR+qEYY8Kj7cPMwgI8CDGv7F1jEqaOBRqloiT7On2w2b2OCrayR9xlTPdC4RBfQgI8SCe64fFfJxRGFcqzgWsi/MKXoTPFChF0Pq6n/jYOJwE7AgI8CDKwiCAyWgcNxoWBqkJP7Ok8XwsNX03IVXNEck1GoFrjAgI8CCvAJbgAaUlE/Hqd2vjHHEnonwHP6rFSSTHLvq0pgpOIwgI8CAyZqK/QPV/okyeinJVpckubwDf8glUkDULEjVAKyBKsQgI8SDBkxwrApSs5WfUSkOAcSqk4a1bgTx0VNiodt0nmsZV/QgIAAWIlg1z1xkBA965Hw==";
         //String eth = "8BD0dgjKdcGJJrOqterOHLYpCPEEWrlDOfAIBW5AgpyIBub/AIPf4w0u+QyOISBodHRwczovL2V0aC5vdHMuZXRlcm5pdHl3YWxsLmNvbQjxIBtBcmlDWEsIUSSYcJ2j2wGkhh2M/O43MLeMoB25zpb3CPAg8kqaIIYwmbSTHkcDFqnmA/geUKP/e6hoesKIfJKUayoI8SX4hoG3hQEqBfIAgwHhKJTlegWdQVBgNLKbTVZ1jtwdty09eICg8EMloD6/GtZLoo0zsjloobJvXD4XUaM4HXqx2fGTzirZ75rWoGthQk2h4asIjIwYk4aU8jzjJpfpIFBkmr6Jvqp0qEh08QX4iyC4iGfxiAH5AhGghcGAtx7CHlq5Jf/A7dp4XR4lsxPjB4VGSSJcjdXzS3ig1fDc3sXKmehii1GxxpNtoY6DIJK68w3R+Mq74G0yBoSgjCuq7UoC+AX7rF3gvbn8GByT5Zb5g3Je6QLtiteaucigrqhfNjwNt0BGd5LoOaTAGDI1GzcMqUzQZ04lMCAckJSg8OwCoOov3y9zuodccRe9iedZMgSu4Itv7qecHkrYrdyGJcXdoECW0TlWbUQbolDBnz6bkP7uJEYgzKFGCmfGGsJvCr3/oAqoegOE/pO8x3kvVANjnJgeVgZD/GZOxyaJit5nqaBIoDDs3MCj/rUjgR2KFwZvyA4Bg0iZQkS09TNQOkWUHIhDoHyZYMLeQR1Z1QtkSlXwLjEPwLb869xDkjn+/SnxJR9poE84qjjg1/6BrZIfK4Xn2n47tuz/80F21UVPdH7+OtuvoLc7iOV9WO45kbzsEPNbk2G0MyyrTdpntXnKrHhyneI3oAvCVrOIrJb5FlLnnucdB2G2a3aZu8zcf9SWHea/xDpwoE/It1w2HDd8rEPhFmkZp/PqQbC5m7U5MaHGypBUkMoxoNru9gQEh2Wl8pkG7nRvn6B4kfMkBtp/42wtE04AycJfoGBF0MRyu+XR0tOwr2f3b5jJuNtMnIvAT1Gxp2jvZ65cgGfxLPiRgICAgICAgICgJ+ElPvTnM5vhnvS4miHY6+myiPxlnqfyIXhSODujyQ6g8EegSYnWBTdpC/pyLPhE6qvdC+lPmmbk9lWYOr1cvokcWbCgJ5UdnbHkjKcr46gnlITcwk9e7wvxVlxThZNCGeSHay2AgICAgGfxJPhRoCZAVq8i8S94JTgipchI7lqGXQIsr50XMBt8HXOCEI6xoPAPgICAgICAgICAgICAgICAZ/GMAvkBMaD5+3z5jUPlDB4VFwv7xbIgZHXPwxkV7zL7kno6loAK/aDmmgfl49oMw7DAIyOqPstTyBmj+dGzoC576zf1Ik44+aBRlpTbcSa9Mx34BrBILGFKxvf8pINx/j05lOjcinMUy6CCjG5H5jFfVYUZNwhTozrESw/QuTY7oCn63tz0b+XPJaD1KAkmSduV9XrRLt/WBIYQbiJwn3LNhPudPwsNpCaPfqAlvGpZHqxFD3/k7wfaGiMZVt6EQQ/1MA6newGOn7P7B6A21s3wCxj4VUAHjIjdIJDvr0UlibWU+JUxrf16yTjsX6BZVVegOKPLC/6+Mp+j/XCnpzKaJD/UIbi4t9I4AXzPmaDwCICAgICAgICAZwAw/oCHtcfq1wTAk8UC";
-        List<String> list = new ArrayList<>();
-        list.add(cata);
-        list.add(alice);
-        list.add(bob);
-        list.add(finney);
+        List<String> list = Arrays.asList(cata, alice, bob, finney);
 
         for (String el : list) {
             final byte[] bytes = DatatypeConverter.parseBase64Binary(el);
             StreamDeserializationContext ctx = new StreamDeserializationContext(bytes);
             Timestamp timestamp = Timestamp.deserialize(ctx, digestByte);
-
-            try {
-                root.merge(timestamp);
-            } catch (Exception e) {
-                fail("Could not merge timestamp: " + e);
-            }
+            root.merge(timestamp);
         }
 
         StreamSerializationContext streamSerializationContext = new StreamSerializationContext();
