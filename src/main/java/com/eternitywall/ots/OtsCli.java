@@ -47,7 +47,6 @@ public class OtsCli {
     private static String verifyFile = null;
 
     public static void main(String[] args) {
-        // Create the Options
         Options options = new Options();
         options.addOption("c","calendar", true, "Create timestamp with the aid of a remote calendar. May be specified multiple times.");
         options.addOption("k","key",      true, "Signature key file of private remote calendars.");
@@ -62,6 +61,7 @@ public class OtsCli {
 
         // Parse the args to retrieve options & command
         CommandLineParser parser = new BasicParser();
+
         try {
             CommandLine line = parser.parse(options, args);
             // args are the arguments passed to the  the application via the main method
@@ -108,6 +108,7 @@ public class OtsCli {
 
             if (line.hasOption("a")) {
                 algorithm = line.getOptionValue("a");
+
                 if (!Arrays.asList(algorithms).contains(algorithm.toUpperCase())) {
                     System.out.println("Algorithm: " + algorithm + " not supported\n");
                     return;
@@ -215,7 +216,7 @@ public class OtsCli {
             String infoResult = OpenTimestamps.info(detached, verbose);
             System.out.println(infoResult);
         } catch (IOException e) {
-            log.severe("No valid file");
+            log.severe("No valid file: " + e);
         }
     }
 
@@ -227,7 +228,7 @@ public class OtsCli {
             try {
                 privateUrls = readSignature(signatureFile);
             } catch (Exception e) {
-                log.severe("No valid signature file");
+                log.severe("No valid signature file: " + e);
                 return;
             }
         }
@@ -242,11 +243,11 @@ public class OtsCli {
                 mapFiles.put(argsFile, DetachedTimestampFile.from(hash));
             } catch (IOException e) {
                 e.printStackTrace();
-                log.severe("File read error");
+                log.severe("File read error: " + e);
                 return;
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
-                log.severe("Crypto error");
+                log.severe("Crypto error: " + e);
                 return;
             }
         }
@@ -263,7 +264,7 @@ public class OtsCli {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            log.severe("Stamp error");
+            log.severe("Stamp error: " + e);
 
             return;
         }
@@ -285,7 +286,7 @@ public class OtsCli {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                log.severe("File '" + argsOts + "' writing error");
+                log.severe("File '" + argsOts + "' writing error: " + e);
             }
         }
     }
@@ -297,7 +298,7 @@ public class OtsCli {
             try {
                 privateUrls = readSignature(signatureFile);
             } catch (Exception e) {
-                log.severe("No valid signature file");
+                log.severe("No valid signature file: " + e);
             }
         }
 
@@ -315,7 +316,7 @@ public class OtsCli {
             Files.write(path, stampResult.serialize());
             System.out.println("The timestamp proof '" + argsOts + "' has been created!");
         } catch (Exception e) {
-            log.severe("Invalid shasum");
+            log.severe("Invalid shasum: " + e);
         }
     }
 
@@ -358,7 +359,7 @@ public class OtsCli {
                 System.out.println(e.getMessage());
             }
         } catch (Exception e) {
-            log.severe("No valid file");
+            System.err.println("No valid file: " + e);
         }
     }
 
@@ -390,10 +391,10 @@ public class OtsCli {
                 Files.write(pathOts, detachedOts.serialize());
             }
         } catch (IOException e) {
-            log.severe("No valid file");
+            log.severe("No valid file: " + e);
         } catch (Exception e) {
             e.printStackTrace();
-            log.severe("Shrink error");
+            log.severe("Shrink error: " + e);
         }
     }
 
