@@ -12,7 +12,8 @@ import java.util.Objects;
 public class VerifyResult implements Comparable<VerifyResult> {
     private static final String DATE_PATTERN = "YYYY-MM-dd z";
     private static final DateFormatSymbols DATE_FORMAT_SYMBOLS = new DateFormatSymbols(new Locale("en", "UK"));
-    public static enum Chains {
+
+    public enum Chains {
         BITCOIN, LITECOIN, ETHEREUM
     }
 
@@ -33,13 +34,14 @@ public class VerifyResult implements Comparable<VerifyResult> {
         }
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_PATTERN, DATE_FORMAT_SYMBOLS);
-        String string = simpleDateFormat.format(new Date(timestamp * 1000));
+        String dateTime = simpleDateFormat.format(new Date(timestamp * 1000));
 
-        return "block " + String.valueOf(height) + " attests data existed as of " + string;
+        return "block " + height + " attests data existed as of " + dateTime;
     }
 
     @Override
     public int compareTo(VerifyResult other) {
+        // TODO: This is weird, we're not looking at timestamp, which we do in equals()...
         return this.height - other.height;
     }
 
