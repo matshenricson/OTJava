@@ -42,7 +42,7 @@ public class TestStreamDeserializationContext {
         StreamDeserializationContext streamDeserializationContext = new StreamDeserializationContext(streamSerializationContext.getOutput());
         PendingAttestation pendingAttestationCheck = (PendingAttestation) TimeAttestation.deserialize(streamDeserializationContext);
 
-        assertArrayEquals(uri, pendingAttestationCheck.getUri());
+        assertEquals(pendingAttestation, pendingAttestationCheck);
     }
 
     @Test
