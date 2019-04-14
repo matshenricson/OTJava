@@ -15,7 +15,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static org.bitcoinj.core.Utils.toBytes;
@@ -31,7 +30,9 @@ public class TestTimestamp {
         Timestamp expectedTimestamp = new Timestamp(toBytes("abcdefgh", "UTF-8"));
         assertEquals(expectedTimestamp, timestamp.ops.get(opAppend));
 
-        // The second add should succeed with the timestamp unchanged
+        // Subsequent adds should succeed with the timestamp unchanged
+        timestamp.add(opAppend);
+        timestamp.add(opAppend);
         timestamp.add(opAppend);
         assertEquals(expectedTimestamp, timestamp.ops.get(opAppend));
     }
@@ -47,9 +48,7 @@ public class TestTimestamp {
 
         t1.ops.put(opAppend1, new Timestamp(toBytes("foobar", "UTF-8")));
 
-        for (Map.Entry<Op, Timestamp> entry : t1.ops.get(opAppend1).ops.entrySet()) {
-            Timestamp timestamp = entry.getValue();
-            Op op = entry.getKey();
+        for (Op op : t1.ops.get(opAppend1).ops.keySet()) {
             assertNotEquals(op, opAppend2);
         }
     }
@@ -63,21 +62,21 @@ public class TestTimestamp {
 
         StreamDeserializationContext sdc = new StreamDeserializationContext(expectedSerialized);
         Timestamp actualInstance = Timestamp.deserialize(sdc, expectedInstance.msg);
-        assertTrue(expectedInstance.equals(actualInstance));
+        assertEquals(expectedInstance, actualInstance);
     }
 
     @Test
     public void testTimestampSerializationDeserialization() throws IOException {
-        Timestamp stamp = new Timestamp(toBytes("foo", "UTF-8"));
-        stamp.attestations.add(new PendingAttestation(toBytes("foobar", "UTF-8")));
+        Timestamp timestamp = new Timestamp(toBytes("foo", "UTF-8"));
+        timestamp.attestations.add(new PendingAttestation(toBytes("foobar", "UTF-8")));
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         baos.write(0x00);
         baos.write(hexToBytes("83dfe30d2ef90c8e" + "07" + "06"));
         baos.write(toBytes("foobar", "UTF-8"));
-        tSerialize(stamp, baos.toByteArray());
+        tSerialize(timestamp, baos.toByteArray());
 
-        stamp.attestations.add(new PendingAttestation(toBytes("barfoo", "UTF-8")));
+        timestamp.attestations.add(new PendingAttestation(toBytes("barfoo", "UTF-8")));
 
         baos = new ByteArrayOutputStream();
         baos.write(0xff);
@@ -87,9 +86,9 @@ public class TestTimestamp {
         baos.write(0x00);
         baos.write(hexToBytes("83dfe30d2ef90c8e" + "07" + "06"));
         baos.write(toBytes("foobar", "UTF-8"));
-        tSerialize(stamp, baos.toByteArray());
+        tSerialize(timestamp, baos.toByteArray());
 
-        stamp.attestations.add(new PendingAttestation(toBytes("foobaz", "UTF-8")));
+        timestamp.attestations.add(new PendingAttestation(toBytes("foobaz", "UTF-8")));
 
         baos = new ByteArrayOutputStream();
         baos.write(0xff);
@@ -103,14 +102,14 @@ public class TestTimestamp {
         baos.write(0x00);
         baos.write(hexToBytes("83dfe30d2ef90c8e" + "07" + "06"));
         baos.write(toBytes("foobaz", "UTF-8"));
-        tSerialize(stamp, baos.toByteArray());
+        tSerialize(timestamp, baos.toByteArray());
 
-        //Timestamp sha256Stamp = stamp.ops.put(new OpSHA256(), null);
+        //Timestamp sha256Stamp = timestamp.ops.put(new OpSHA256(), null);
         // Should fail - empty timestamps can't be serialized
         //StreamSerializationContext ssc = new StreamSerializationContext();
-        //stamp.serialize(ssc);
+        //timestamp.serialize(ssc);
         OpSHA256 opSHA256 = new OpSHA256();
-        Timestamp sha256Stamp = stamp.add(opSHA256);
+        Timestamp sha256Stamp = timestamp.add(opSHA256);
         // TODO: check testTimestampSerializationDeserialization
 
         sha256Stamp.attestations.add(new PendingAttestation(toBytes("deeper", "UTF-8")));
@@ -132,7 +131,7 @@ public class TestTimestamp {
         baos.write(0x00);
         baos.write(hexToBytes("83dfe30d2ef90c8e" + "07" + "06"));
         baos.write(toBytes("deeper", "UTF-8"));
-        tSerialize(stamp, baos.toByteArray());
+        tSerialize(timestamp, baos.toByteArray());
     }
 
     @Test
@@ -152,7 +151,7 @@ public class TestTimestamp {
 
         try {
             stamp1.merge(stamp2);
-            assertTrue(stamp1.equals(stamp2));
+            assertEquals(stamp1, stamp2);
         } catch (Exception e) {
             fail("Unexpected exception: " + e);
         }
