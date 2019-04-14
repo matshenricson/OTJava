@@ -214,10 +214,8 @@ public class DetachedTimestampFile {
      */
     @Override
     public String toString() {
-        String output = "com.eternitywall.ots.DetachedTimestampFile\n";
-        output += "fileHashOp: " + this.fileHashOp.toString() + '\n';
-        output += "timestamp: " + this.timestamp.toString() + '\n';
-
-        return output;
+        return "com.eternitywall.ots.DetachedTimestampFile\n" +
+               "fileHashOp: " + this.fileHashOp.toString() + '\n' +
+               "timestamp: " + this.timestamp.toString() + '\n';
     }
 }
