@@ -194,9 +194,7 @@ public class Timestamp {
         // Search first BitcoinBlockHeaderAttestation
         BitcoinBlockHeaderAttestation minAttestation = null;
 
-        for (Map.Entry<Op, Timestamp> entry : this.ops.entrySet()) {
-            Timestamp timestamp = entry.getValue();
-
+        for (Timestamp timestamp : this.ops.values()) {
             for (TimeAttestation attestation : timestamp.getAttestations()) {
                 if (attestation instanceof BitcoinBlockHeaderAttestation) {
                     BitcoinBlockHeaderAttestation bitcoinAttestation = (BitcoinBlockHeaderAttestation) attestation;
@@ -257,7 +255,7 @@ public class Timestamp {
         builder.append(Timestamp.indention(indent)).append(this.attestations.size()).append(" attestations: \n");
         int i = 0;
 
-        for (final TimeAttestation attestation : this.attestations) {
+        for (TimeAttestation attestation : this.attestations) {
             builder.append(Timestamp.indention(indent)).append("[").append(i).append("] ").append(attestation.toString()).append("\n");
             i++;
         }
@@ -350,7 +348,7 @@ public class Timestamp {
         StringBuilder builder = new StringBuilder();
 
         if (!this.attestations.isEmpty()) {
-            for (final TimeAttestation attestation : this.attestations) {
+            for (TimeAttestation attestation : this.attestations) {
                 builder.append(Timestamp.indention(indent));
                 builder.append("verify ").append(attestation.toString()).append(strResult(verbosity, this.msg, null)).append("\n");
 
@@ -425,9 +423,7 @@ public class Timestamp {
      */
     public List<Timestamp> directlyVerified() {
         if (!this.attestations.isEmpty()) {
-            List<Timestamp> list = new ArrayList<>();
-            list.add(this);
-            return list;
+            return new ArrayList<>(Collections.singletonList(this));
         }
 
         List<Timestamp> list = new ArrayList<>();
@@ -476,11 +472,7 @@ public class Timestamp {
         }
 
         for (Timestamp ts : this.ops.values()) {
-            HashMap<byte[], TimeAttestation> subMap = ts.allAttestations();
-
-            for (Map.Entry<byte[], TimeAttestation> item : subMap.entrySet()) {
-                map.put(item.getKey(), item.getValue());
-            }
+            map.putAll(ts.allAttestations());
         }
 
         return map;
